@@ -1,19 +1,5 @@
-<!--
-*** Thanks for checking out this README Template. If you have a suggestion that would
-*** make this better, please fork the repo and create a pull request or simply open
-*** an issue with the tag "enhancement".
-*** Thanks again! Now go create something AMAZING! :D
--->
-
 
 <!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
 
 [![release-branch-status][build-shield]][build-url]
 [![Contributors][contributors-shield]][contributors-url]
@@ -30,19 +16,19 @@
     <img src="doc/images/logo.jpg" alt="Logo" width="160" height="160">
   </a>
 
-  <h3 align="center">Cpp-Template</h3>
+  <h3 align="center">SignalProcessingPipeline (SPP)</h3>
 
   <p align="center">
-    A simple and easy template for you C++ projects
+   A small project for building signal processing pipelines in c++
     <br />
-    <a href="https://github.com/Bertouz/CppTemplate"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/Bertouz/SignalProcessingPipeline"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/Bertouz/CppTemplate">View Demo</a>
+    <a href="https://github.com/Bertouz/SignalProcessingPipeline">View Demo</a>
     ·
-    <a href="https://github.com/Bertouz/CppTemplate/issues">Report Bug</a>
+    <a href="https://github.com/Bertouz/SignalProcessingPipeline/issues">Report Bug</a>
     ·
-    <a href="https://github.com/Bertouz/CppTemplate/issues">Request Feature</a>
+    <a href="https://github.com/Bertouz/SignalProcessingPipeline/issues">Request Feature</a>
   </p>
 </p>
 
@@ -51,63 +37,52 @@
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents
 
-* [About the Project](#about-the-project)
-  * [Built With](#built-with)
-* [Getting Started](#getting-started)
-  * [Prerequisites](#prerequisites)
-  * [Installation](#installation)
-* [Usage](#usage)
-* [Roadmap](#roadmap)
-* [Contributing](#contributing)
-* [License](#license)
-* [Contact](#contact)
-* [Acknowledgements](#acknowledgements)
+- [Table of Contents](#table-of-contents)
+- [About The Project](#about-the-project)
+  - [Built With](#built-with)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+    - [1. Install CMake](#1-install-cmake)
+    - [2. Install Clang tools (optional)](#2-install-clang-tools-optional)
+      - [Windows](#windows)
+      - [Ubuntu](#ubuntu)
+    - [3. Install Doxygen (optional)](#3-install-doxygen-optional)
+      - [Windows](#windows-1)
+      - [Ubuntu](#ubuntu-1)
+    - [4. Install Catch2 (optional)](#4-install-catch2-optional)
+      - [Ubuntu](#ubuntu-2)
+    - [4. Install gcovr (optional)](#4-install-gcovr-optional)
+      - [Ubuntu](#ubuntu-3)
+  - [Installation](#installation)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [License](#license)
 
 
 
-<!-- ABOUT THE PROJECT -->
 ## About The Project
 
-<!-- [![Product Name Screen Shot][product-screenshot]](https://example.com) -->
+Signal Processing Pipeline (SPP) is a simple project that started as an interview exercice but ended in a project for building 1d signal processing pipelines.  
 
-I needed a template for my c++ projects to be more DRY. There is many other C++ template but I needed one that is more specific to me needs:
-
-This template configure a project with unit testing using Catch2, integrate static analysis to the build process with clang-tidy, allow project formatting with clang-format and generate the documentaton with doxygen.
-
-Here's why:
-* Documentation generation with doxygen included to the compilation process 
-* Static analysis with clang-tidy included to the compilation process
-* Code formatting enabled with clang-format
-* Code coverage analysis and reporting setup with gcov/lcov/gcovr
-* Unit testing setup 
-
-Of course, no one template will serve all projects since your needs may be different. You may also suggest changes by forking this repo and creating a pull request or opening an issue.
-
-A list of commonly used resources that I find helpful are listed in the acknowledgements.
+Aims :  
++ Provide primitive for building powerfull processing algorithms
++ Provide primitives for building streaming processing in blocs
++ Provide primitives for building microservices
 
 ### Built With
 This project is built using CMake.
-* [CMake 3.14](https://cmake.org)
+* [CMake 3.20.4](https://cmake.org)
 
 
-
-<!-- GETTING STARTED -->
 ## Getting Started
 
-To get a local copy up and running follow these simple example steps.
+In this sections we will explain how to build the project from sources  
 
 ### Prerequisites
 
 #### 1. Install CMake 
-This project use CMake for build configuration, you will need it.
-
-##### Windows
-Download binaries from [CMake](https://cmake.org/download/)
-
-##### Ubuntu
-```sh
-sudo apt-get install cmake
-```
+This project use CMake for build configuration, you will need it.  
+Check [CMake](https://cmake.org/download/) official site for more informations.  
 
 #### 2. Install Clang tools (optional)
 
@@ -171,13 +146,13 @@ Now that you have installed the dependencies you need you just have to compile a
 
 1. Clone the repo
 ```sh
-git clone https://github.com/Bertouz/CppProject
+git clone https://github.com/Bertouz/SignalProcessingPipeline
 ```
 2. Build project
 ```sh
 cd CppProject
 mkdir build && cd build
-cmake -DBUILD_DOC=ON -DBUILD_TESTS=OFF -DENABLE_CLANG_FORMAT=OFF -DENABLE_CLANG_TIDY=OFF -DENABLE_CODE_COVERAGE=OFF -DCMAKE_INSTALL_PREFIX=path_to_installation_dir ..
+cmake -DBUILD_DOC=OFF -DBUILD_TESTS=OFF -DENABLE_CLANG_FORMAT=OFF -DENABLE_CLANG_TIDY=OFF -DENABLE_CODE_COVERAGE=OFF -DCMAKE_INSTALL_PREFIX=path_to_installation_dir ..
 make -j4
 ```
 
@@ -186,25 +161,10 @@ make -j4
 make install
 ```
 
-
-
-
-<!-- USAGE EXAMPLES -->
-## Usage
-
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
-
-
-
-
-<!-- ROADMAP -->
 ## Roadmap
 
-See the [open issues](https://github.com/Bertouz/CppTemplate/issues) for a list of proposed features (and known issues).
+See the [open issues](https://github.com/Bertouz/SignalProcessingPipeline/issues) for a list of proposed features (and known issues).
 
-<!-- CONTRIBUTING -->
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
@@ -212,8 +172,12 @@ Contributions are what make the open source community such an amazing place to b
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
 3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+4. Format the sources with clang-format
+5. Run clang-tidy analysis and check for errors
+6. Check that the added source code is 100% covered by unit tests
+7. Push to the Branch (`git push origin feature/AmazingFeature`)
+8. Open a Pull Request
+9. Wait for review 
 
 
 
@@ -222,34 +186,17 @@ Contributions are what make the open source community such an amazing place to b
 
  Distributed under the GNU LESSER GENERAL PUBLIC LICENSE. See `LICENSE` for more information.
 
-<!-- CONTACT 
-## Contact
-
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
-
- Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
--->
-
-
-<!-- ACKNOWLEDGEMENTS -->
-## Acknowledgements
-* [Best-README-Template](https://github.com/othneildrew/Best-README-Template)<!-- awsome readme-->
-* [Code coverage module](https://github.com/bilke/cmake-modules)<!-- Code coverage module-->
-
-
-
-
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/Bertouz/CppTemplate
-[contributors-url]: https://github.com/Bertouz/CppTemplate/graphs/contributors
-[forks-shield]:  https://img.shields.io/github/forks/Bertouz/CppTemplate
-[forks-url]: https://github.com/Bertouz/CppTemplate/network/members
-[issues-shield]: https://img.shields.io/github/issues-raw/Bertouz/CppTemplate 
-[issues-url]: https://github.com/Bertouz/CppTemplate/issues
-[license-shield]: https://img.shields.io/github/license/Bertouz/CppTemplate
-[license-url]: https://github.com/Bertouz/CppTemplate/blob/release/LICENSE 
+[contributors-shield]: https://img.shields.io/github/contributors/Bertouz/SignalProcessingPipeline
+[contributors-url]: https://github.com/Bertouz/SignalProcessingPipeline/graphs/contributors
+[forks-shield]:  https://img.shields.io/github/forks/Bertouz/SignalProcessingPipeline
+[forks-url]: https://github.com/Bertouz/SignalProcessingPipeline/network/members
+[issues-shield]: https://img.shields.io/github/issues-raw/Bertouz/SignalProcessingPipeline 
+[issues-url]: https://github.com/Bertouz/SignalProcessingPipeline/issues
+[license-shield]: https://img.shields.io/github/license/Bertouz/SignalProcessingPipeline
+[license-url]: https://github.com/Bertouz/SignalProcessingPipeline/blob/release/LICENSE 
 [product-screenshot]: images/doc/images/Logo_template.png
-[build-shield]: https://img.shields.io/github/workflow/status/Bertouz/CppTemplate/Build/release
-[build-url]: https://github.com/Bertouz/CppTemplate/workflows/Build
+[build-shield]: https://img.shields.io/github/workflow/status/Bertouz/SignalProcessingPipeline/Build/release
+[build-url]: https://github.com/Bertouz/SignalProcessingPipeline/workflows/Build
