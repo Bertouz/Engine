@@ -1,50 +1,34 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(MyCppProject
+project(Spp
     VERSION 0.0.1
     LANGUAGES CXX
     )
-
-## When we do conan install we download and/or build the dependencies
-## Then a conanbuildinfo.cmake file is generated with the variables defining the targets
-## to those dependencies
 
 #############################
 ### Project Options
 #############################
 include(CMakeDependentOption)
 
-option(BUILD_DOC "Build documentation" OFF) 
-option(BUILD_TESTS "Build unit testing" OFF)
-option(USE_CONAN "Define if we want to use conan for handling dependencies if its available" OFF)
-option(ENABLE_CODE_COVERAGE "Add gcov/lcov analysis to process" OFF)
+option(BUILD_DOC "Build documentation" ON) 
+option(BUILD_TESTS "Build unit testing" ON)
+option(ENABLE_CODE_COVERAGE "Add gcov/lcov analysis to process" ON)
 option(ENABLE_CLANG_TIDY "Add clang-tidy analysis to source code" OFF)
-option(ENABLE_CLANG_FORMAT "Add clang-format to build process" OFF)
-option(ENABLE_MICRO_BENCHMARKS "Build project microbenchmarks" OFF)
-cmake_dependent_option(ENABLE_MEMCHECK "Add memory check to unit test" ON BUILD_TESTS OFF)
+option(ENABLE_CLANG_FORMAT "Add clang-format to build process" ON)
+option(ENABLE_MICRO_BENCHMARKS "Build project microbenchmarks" ON)
+option(USE_SUBMODULE "If set to true then we prefer to use the submodule for the dependencies instead of the findpackage" ON)
+option(USE_SCIPLOT "If set to true then we will use sciplot in the project" ON)
+set(SHARED_OR_STATIC "STATIC" CACHE STRING "set to shared if you want to build libraries as shared libraries")
+set(TOOLS "pico" CACHE STRING "Semi colon separated list of tools you want to build, possible values are : pico;")
+cmake_dependent_option(ENABLE_MEMCHECK "Add memory check to unit test" ON BUILD_TESTS ON)
 
 
 ####################################
 ### Include cmake scripts and config
 ####################################
-if(EXISTS ${CMAKE_BINARY_DIR}/conaninfo.txt)
-	set(USE_CONAN ON)
-endif()
 
-if(USE_CONAN)
-	message(STATUS "Using conan generated FindXXX.cmake files")
-	list(PREPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
-endif()
 
-if(CONAN_CXX_COMPILER)
-	set(CMAKE_CXX_STANDARD ${CONAN_CMAKE_CXX_COMPILER})
-endif()
-
-if(CONAN_CMAKE_CXX_STANDARD)
-	set(CMAKE_CXX_STANDARD ${CONAN_CMAKE_CXX_STANDARD})
-else()
-	set(CMAKE_CXX_STANDARD 14)
-endif()
+set(CMAKE_CXX_STANDARD 20)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/)
 
@@ -83,14 +67,33 @@ endif(ENABLE_CODE_COVERAGE)
 if(ENABLE_MICRO_BENCHMARKS)
     message(STATUS "Enabling project microbenchmarks")
     list(APPEND CMAKE_MESSAGE_INDENT "  ")
-	find_package(benchmark REQUIRED)
+    if(USE_SUBMODULE)
+        add_subdirectory(external/benchmark)
+    else()
+        find_package(benchmark REQUIRED)
+    endif()
     list(POP_BACK CMAKE_MESSAGE_INDENT )
 endif(ENABLE_MICRO_BENCHMARKS)
+
+if(USE_SCIPLOT)
+  if(USE_SUBMODULE)
+     add_subdirectory(external/sciplot)
+  else()
+     message(FATAL "At the moment we can only use sciplot as a submodule, if you want to use an installed version please modify the cmakelists")
+  endif(USE_SUBMODULE)
+endif(USE_SCIPLOT)
 
 if (CMAKE_BINARY_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
     message(FATAL_ERROR "Building in-source is not supported! Create a build dir and remove ${CMAKE_SOURCE_DIR}/CMakeCache.txt")
 endif()
 
+if(CMAKE_BUILD_TYPE STREQUAL "")
+  set(CMAKE_BUILD_TYPE Release)
+endif()
+
+if(TOOLS)
+    add_subdirectory(external/CLI11)
+endif()
 
 
 #############################
@@ -103,13 +106,17 @@ endif()
 if(BUILD_DOC)
 	find_package(Doxygen REQUIRED)
 	#find_package(Sphinx REQUIRED)
-	find_program(SPHINX_EXECUTABLE NAMES sphinx-build DOC "Path to sphinx-build executable")
+    find_program(SPHINX_EXECUTABLE NAMES sphinx-build DOC "Path to sphinx-build executable")
 	find_package_handle_standard_args(Sphinx "Failed to find sphinx-build executable" SPHINX_EXECUTABLE)
 endif(BUILD_DOC)
 
 if(BUILD_TESTS)
-    if(NOT Catch2_FOUND)
-	find_package(Catch2 3 REQUIRED)
+    include(CTest)
+
+    if(USE_SUBMODULE)
+        add_subdirectory(external/Catch2)
+    else()
+        find_package(Catch2 3 REQUIRED)
     endif()
 
     if(ENABLE_MEMCHECK)
@@ -130,13 +137,7 @@ endif(BUILD_TESTS)
 ### Project
 #############################
 
-if(BUILD_TESTS)
-    include(CTest)
-endif(BUILD_TESTS)
-
-add_subdirectory(project)
-
-
+add_subdirectory(spp)
 
 #############################
 ### Documentation
@@ -144,7 +145,6 @@ add_subdirectory(project)
 if(BUILD_DOC)
    add_subdirectory(doc)
 endif(BUILD_DOC)
-
 
 #############################
 ### Installation
@@ -168,14 +168,14 @@ write_basic_package_version_file( "${version_config}" COMPATIBILITY SameMajorVer
 
 # Write package config file
 configure_package_config_file(
-    "cmake/MyCppProjectConfig.cmake.in"
+    "cmake/${PROJECT_NAME}Config.cmake.in"
     "${project_config}"
     INSTALL_DESTINATION "${config_install_dir}"
 )
 
 # Install targets
 install(
-    TARGETS app1 lib1 lib2 #plus others if there is
+    TARGETS dft pico 
     EXPORT "${TARGETS_EXPORT_NAME}"
     LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}/"
     ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}/"
