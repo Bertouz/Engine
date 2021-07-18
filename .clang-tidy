@@ -1,0 +1,62 @@
+
+Checks:          '-*,performance-*,readability-*,portabilty-*,cppcoreguidlines-*'
+WarningsAsErrors: ''
+HeaderFilterRegex: '.*'
+AnalyzeTemporaryDtors: false
+FormatStyle:     none
+User:            cele
+CheckOptions:
+  - key:             modernize-loop-convert.NamingStyle
+    value:           CamelCase
+  - key:             readability-function-size.LineThreshold
+    value:           20
+  - key:             readability-function-size.StatementThreshold
+    value:           20
+  - key:             readability-function-size.BranchThreshold
+    value:           10
+  - key:             readability-function-size.ParameterThreshold
+    value:           6
+  - key:             readability-function-size.VariableThreshold
+    value:           20
+  - key:             readability-identifier-naming.ClassCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.AbstractClassPrefix
+    value:           I
+  - key:             readability-identifier-naming.AbstractClassCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.ClassMemberCase
+    value:           lower_case
+  - key:             readability-identifier-naming.ClassMemberPrefix
+    value:           _
+  - key:             readability-identifier-naming.ClassMethodCase
+    value:           camelBack
+  - key:             readability-identifier-naming.EnumCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.EnumConstantCase
+    value:           UPPER_CASE
+  - key:             readability-identifier-naming.FunctionCase
+    value:           lower_case
+  - key:             readability-identifier-naming.LocalConstantCase
+    value:           lower_case
+  - key:             readability-identifier-naming.LocalConstantPointerCase
+    value:           lower_case
+  - key:             readability-identifier-naming.LocalPointerCase
+    value:           lower_case
+  - key:             readability-identifier-naming.LocalVariableCase
+    value:           lower_case
+  - key:             readability-identifier-naming.NamespaceCase
+    value:           lower_case
+  - key:             readability-identifier-naming.ParameterCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.ParameterPrefix
+    value:           p
+  - key:             readability-identifier-naming.StructCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.TemplateParameterCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.TemplateTemplateParameterCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.VariableCase
+    value:           lower_case
+  #- key:             readability-function-size.NestingThreshold #Uncomment when there is a solution to not take Catch2 macros in consideration but i dont think its possible
+  #  value:           3

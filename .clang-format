@@ -1,0 +1,10 @@
+﻿---
+BasedOnStyle: Microsoft
+IndentWidth: '4'
+Language: Cpp
+NamespaceIndentation: None
+SortIncludes: 'true'
+TabWidth: '4'
+UseTab: Never
+
+...

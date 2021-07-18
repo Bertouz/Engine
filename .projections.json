@@ -1,0 +1,30 @@
+{
+	"include/MyCppProject/*.hpp":
+	{
+		"type":"header",
+		"alternate":"src/{}.cpp"
+	},
+	"src/*.cpp":
+	{
+		"type":"source",
+		"alternate":"tests/unit/{}-test.cpp"
+	},
+	"tests/unit/*-test.cpp":
+	{
+		"type":"testu",
+		"alternate":"include/MyCppProject/{}.hpp"
+	},
+	"benchmarks/micro/*-bench.cpp":
+	{
+		"type":"bench",
+		"alternate":"include/MyCppProject/{}.hpp"
+	},
+	"main*.cpp":
+	{
+		"type":"main"
+	},
+	"README.md":
+	{
+		"type":"doc"
+	}
+}
