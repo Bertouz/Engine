@@ -6,7 +6,7 @@ set(test_name "testu-${curr_subproject}")
 
 add_executable(${test_name}
     main_testu.cpp
-    hello-test.cpp
+    fftw3_wrapper-test.cpp
     )
 
 target_link_libraries(${test_name} PRIVATE 
@@ -14,6 +14,7 @@ target_link_libraries(${test_name} PRIVATE
     ${curr_subproject}
     plot
 )
+set_property(TARGET ${test_name} PROPERTY CXX_STANDARD 20)
 
 # Add the target to the list of ctest's tests
 add_test(${test_name} ${test_name})

@@ -5,7 +5,10 @@ list(APPEND CMAKE_MESSAGE_INDENT " ")
 
 set(bench_name "bench-${curr_subproject}")
 
-add_executable(${bench_name} main.cpp hello-bench.cpp)
+add_executable(${bench_name} 
+main.cpp 
+fftw3-bench.cpp
+)
 
 target_link_libraries(${bench_name} PRIVATE ${curr_subproject} benchmark::benchmark)
 

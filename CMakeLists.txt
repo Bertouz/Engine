@@ -75,6 +75,12 @@ if(ENABLE_MICRO_BENCHMARKS)
     list(POP_BACK CMAKE_MESSAGE_INDENT )
 endif(ENABLE_MICRO_BENCHMARKS)
 
+# At the moment I only use fftw for dft but in the future I should add other library and give the option to choose one or more
+message(STATUS "Looking for fftw3")
+list(APPEND CMAKE_MESSAGE_INDENT "  ")
+find_package(FFTW3 REQUIRED)
+list(POP_BACK CMAKE_MESSAGE_INDENT )
+
 if(USE_SCIPLOT)
   if(USE_SUBMODULE)
      add_subdirectory(external/sciplot)

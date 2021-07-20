@@ -6,14 +6,14 @@
 set(curr_subproject dft)
 
 add_library(${curr_subproject} ${SHARED_OR_STATIC}
-    "src/hello.cpp" 
+    "src/fftw3/fftw3_wrapper.cpp" 
 )
 
 target_include_directories(${curr_subproject} PUBLIC
                        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include> # for headers when building
                        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
-#target_link_libraries()
+target_link_libraries(${curr_subproject} PRIVATE FFTW3::fftw3)
 
 #############################
 ### benchmarks
