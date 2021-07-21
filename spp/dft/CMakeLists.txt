@@ -30,6 +30,11 @@ if(BUILD_TESTS)
 endif(BUILD_TESTS)
 
 #############################
+### Examples
+#############################
+add_subdirectory(examples)
+
+#############################
 ### Installation
 #############################
 
