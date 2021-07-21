@@ -44,19 +44,23 @@ int main()
     std::cout<<"freq_carrier_Hz = "<<freq_carrier_Hz<<std::endl;
     std::cout<<"freq_modu_Hz = "<<freq_modu_Hz<<std::endl;
 
-    //static_assert(freq_carrier_Hz > 2*fe );
+    static_assert(freq_carrier_Hz < fe/2 );
 
-    //static_assert(freq_modu_Hz > 2*fe );
+    static_assert(freq_modu_Hz < fe/2 );
 
     constexpr double amp_modu = 1;
      
     constexpr double amp_carrier = 1;
 
-    double* signal = (double*) fftw_malloc(sizeof(double) * n);
+    //double* signal = (double*) fftw_malloc(sizeof(double) * n);
 
-    fftw_complex* spectrum = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * (n/2+1));
+    //fftw_complex* spectrum = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * (n/2+1));
+    
+    std::vector<double> signal(n);
 
-    fftw_plan p = fftw_plan_dft_r2c_1d(n, signal, spectrum, FFTW_ESTIMATE /*FFTW_PRESERVE_INPUT*/);
+    //fftw_complex* spectrum = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * (n/2+1));
+
+    std::vector<fftw_complex> spectrum(n/2+1);
 
     std::vector<double> t(n);
 
@@ -69,9 +73,12 @@ int main()
         signal[id] = (1 + amp_modu * cos(2*std::numbers::pi * freq_modu_Hz * t[id])) * amp_carrier * sin(2 * std::numbers::pi * freq_carrier_Hz * t[id]);
     }
 
-    fftw_execute(p);
-    std::vector<double> ss(n);
-    std::copy(signal, signal+n, ss.begin());
+    dft::fftw::fft1d(signal.begin(), signal.end(), spectrum.begin());
+
+    //fftw_plan p = fftw_plan_dft_r2c_1d(n, signal.data(), spectrum.data(), FFTW_ESTIMATE | FFTW_PRESERVE_INPUT);
+
+    //fftw_execute(p);
+
     std::vector<double> s_real(n/2+1);
     std::vector<double> s_imag(n/2+1);
     std::vector<double> s_norm(n/2+1);
@@ -91,7 +98,7 @@ int main()
 
     plt::Plot plot;
     plot.palette("set2");
-    plot.drawCurve(t, ss).label("y(t)").lineWidth(4);
+    plot.drawCurve(t, signal).label("y(t)").lineWidth(4);
 
     std::vector<double> f(n/2+1);
 
@@ -114,9 +121,9 @@ int main()
     const std::filesystem::path image_path =  fftw3_wrapper_image_dir / "r2c_sinus.svg";
     figure.save(image_path.string());
 
-    fftw_destroy_plan(p);
-    fftw_free(signal); 
-    fftw_free(spectrum);
+    //fftw_destroy_plan(p);
+    //fftw_free(signal); 
+    //fftw_free(spectrum);
 
     ///! [fftw_wrapper_1d_r2r]
 }
