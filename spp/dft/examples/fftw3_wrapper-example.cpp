@@ -1,4 +1,4 @@
-#include "dft/fftw3/fftw3_wrapper.hpp"
+#include "dft/dft.hpp"
 #include "plot/plot.hpp"
 
 #include <sstream>
@@ -73,7 +73,7 @@ int main()
         signal[id] = (1 + amp_modu * cos(2*std::numbers::pi * freq_modu_Hz * t[id])) * amp_carrier * sin(2 * std::numbers::pi * freq_carrier_Hz * t[id]);
     }
 
-    dft::fftw::fft1d(signal.begin(), signal.end(), spectrum.begin());
+    dft::fft1d(dft::policy::fftw, signal.begin(), signal.end(), spectrum.begin());
 
     //fftw_plan p = fftw_plan_dft_r2c_1d(n, signal.data(), spectrum.data(), FFTW_ESTIMATE | FFTW_PRESERVE_INPUT);
 

@@ -5,6 +5,10 @@
  * @defgroup dft
  */
 
+namespace dft
+{
+
+
 /**
  * @brief fft1d - Compute the 1d Fft of a range of values using the default policy
  * @tparam InputIte - type of input iterator for wich we want to compute the fft
@@ -30,5 +34,4 @@ OutputIte fft1d(InputIte first, InputIte last, OutputIte res);
 template<typename Policy, typename InputIte, typename OutputIte>
 OutputIte fft1d(Policy, InputIte first, InputIte last, OutputIte res);
 
-
-
+}

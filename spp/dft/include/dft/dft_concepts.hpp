@@ -6,6 +6,7 @@
 
 namespace dft
 {
+///@note ce sont plus des concepts sur les complex... 
 
 template<typename T>
 using IsReal = std::is_arithmetic<T>;
