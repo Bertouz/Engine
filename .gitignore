@@ -33,6 +33,7 @@
 
 #Build directory
 build*
+_build*
 
 # For QtCreator
 *.txt.user
