@@ -12,6 +12,7 @@ include(CMakeDependentOption)
 
 option(BUILD_DOC "Build documentation" ON) 
 option(BUILD_TESTS "Build unit testing" ON)
+option(BUILD_EXAMPLES "Build examples" ON)
 option(ENABLE_CODE_COVERAGE "Add gcov/lcov analysis to process" ON)
 option(ENABLE_CLANG_TIDY "Add clang-tidy analysis to source code" OFF)
 option(ENABLE_CLANG_FORMAT "Add clang-format to build process" ON)
@@ -144,7 +145,7 @@ endif(BUILD_TESTS)
 ### Project
 #############################
 
-add_subdirectory(spp)
+add_subdirectory(lib)
 
 #############################
 ### Documentation
@@ -152,6 +153,35 @@ add_subdirectory(spp)
 if(BUILD_DOC)
    add_subdirectory(doc)
 endif(BUILD_DOC)
+
+#############################
+### Tests
+#############################
+if(BUILD_TESTS)
+   add_subdirectory(tests)
+endif(BUILD_TESTS)
+
+#############################
+### Benchmarks
+#############################
+if(ENABLE_MICRO_BENCHMARKS)
+   add_subdirectory(benchmarks)
+endif(ENABLE_MICRO_BENCHMARKS)
+
+#############################
+### Tools 
+#############################
+if(TOOLS)
+   add_subdirectory(tools)
+endif(TOOLS)
+
+
+#############################
+### Examples
+#############################
+if(BUILD_EXAMPLES)
+   add_subdirectory(examples)
+endif(BUILD_EXAMPLES)
 
 #############################
 ### Installation
@@ -182,7 +212,7 @@ configure_package_config_file(
 
 # Install targets
 install(
-    TARGETS dft pico 
+    TARGETS Dft Complex Report Plot Pico 
     EXPORT "${TARGETS_EXPORT_NAME}"
     LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}/"
     ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}/"
