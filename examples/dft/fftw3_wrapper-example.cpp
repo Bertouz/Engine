@@ -35,6 +35,14 @@ int main()
 
     constexpr double freq_modu_Hz = freq_carrier_Hz/2;
 
+    static_assert(freq_carrier_Hz < fe/2 );
+
+    static_assert(freq_modu_Hz < fe/2 );
+
+    constexpr double amp_modu = 1;
+     
+    constexpr double amp_carrier = 1;
+
     std::cout<<"tstart_s = "<<tstart_s<<std::endl;
     std::cout<<"tstop_s = "<<tstop_s<<std::endl;
     std::cout<<"signal_duration = "<<tstop_s<<std::endl;
@@ -43,15 +51,7 @@ int main()
     std::cout<<"freq_res = "<<freq_res<<std::endl;
     std::cout<<"freq_carrier_Hz = "<<freq_carrier_Hz<<std::endl;
     std::cout<<"freq_modu_Hz = "<<freq_modu_Hz<<std::endl;
-
-    static_assert(freq_carrier_Hz < fe/2 );
-
-    static_assert(freq_modu_Hz < fe/2 );
-
-    constexpr double amp_modu = 1;
-     
-    constexpr double amp_carrier = 1;
-    
+ 
     std::vector<double> signal(n);
 
     std::vector<double> t(n);
