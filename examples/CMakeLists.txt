@@ -1,1 +1,1 @@
-add_subdirectory(dft)
+add_subdirectory(spectral_analysis)
