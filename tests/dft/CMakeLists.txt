@@ -3,7 +3,7 @@ message(STATUS "Building Dft Unit Tests")
 list(APPEND CMAKE_MESSAGE_INDENT " ")
 
 add_executable(testu-dft
-    main_testu.cpp
+    main.cpp
     fftw3_wrapper-test.cpp
     )
 
