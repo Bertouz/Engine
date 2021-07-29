@@ -1,8 +1,20 @@
-#include <iostream>
+#include "PicoApplication.hpp"
 
-auto main()->int
+
+auto main(int argc, char** argv)->int
 {
-    std::cout<<"hello world"<<std::endl;
+    try 
+    {
+        auto pico_app = PicoApplication(argc, argv);
 
-    return 0;
+        pico_app.exec();
+    }
+    catch(std::runtime_error & e)
+    {
+        std::cerr<<"Pico processing failed : "<<std::endl;
+        std::cerr<<e.what()<<std::endl;
+    }
+
+    return 1;
+
 }

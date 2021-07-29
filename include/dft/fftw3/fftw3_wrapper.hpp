@@ -15,7 +15,7 @@ namespace spp // definitions
 {
 namespace fftw
 {
-auto fft1d_r2c( double* first, double* last, fftw_complex* res)->fftw_complex*;
+auto fft1d_r2c( const double* first, const double* last, fftw_complex* res)->fftw_complex*;
 
 template<RealInputContiguousIterator InputIte, ComplexOutputContiguousIterator OutputIte>
 inline auto fft1d(InputIte first, InputIte last, OutputIte res)->OutputIte
