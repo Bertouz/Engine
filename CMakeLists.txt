@@ -86,7 +86,6 @@ endif(ENABLE_MICRO_BENCHMARKS)
 message(STATUS "Looking for fftw3")
 list(APPEND CMAKE_MESSAGE_INDENT "  ")
 if(WIN32)
-    set(FFTW_DOUBLE_LIB ON)
     find_package(FFTW REQUIRED COMPONENTS DOUBLE_LIB )#use "our" cmake file
 else()
     find_package(FFTW3 REQUIRED)#use fftw cmake file

@@ -5,6 +5,13 @@ namespace spp
 namespace fftw
 {
 
+auto fft1d_r2c( const double* first, const double* last, std::complex<double>* res)->std::complex<double>*
+{
+    fftw_complex* res_fftw = reinterpret_cast<fftw_complex*>(res);
+    fft1d_r2c(first, last, res_fftw);
+    const int n = std::distance(first, last);
+    return res + n;
+}
 
 auto fft1d_r2c( const double* first, const double* last, fftw_complex* res)->fftw_complex*
 {

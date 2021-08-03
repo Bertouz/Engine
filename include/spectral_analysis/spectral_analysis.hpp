@@ -22,11 +22,9 @@ namespace spp
     {
         // using temporary complex spectrum so we use {real/cpx} to cpx dft
 
-        using cpx_value_type = dft::defaut_cpx_value_type;
-
         size_t spectrum_size = dft_size_r2c(first, last);
 
-        std::vector<cpx_value_type> spectrum(spectrum_size, {0.0,0.0});// @todo use pmr style allocation to avoid temporary allocation
+        std::vector<std::complex<double>> spectrum(spectrum_size, {0.0,0.0});// @todo use pmr style allocation to avoid temporary allocation
 
         fft1d(first, last, spectrum.begin()); 
 
