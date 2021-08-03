@@ -4,7 +4,9 @@
 #include <iostream>
 #include "parser/csv_parser.hpp"
 #include "spectral_analysis/spectral_analysis.hpp"
+#if PLOT_DEBUG
 #include "plot/plot.hpp"
+#endif
 #include "algorithms/generation.hpp"
 
 const static std::map<std::string, std::string> format_ext_mapper{{"csv",".csv"}};
@@ -79,7 +81,7 @@ void PicoApplication::exec()const
 
             std::vector<double> periodogram(nb_points / 2 + 1);// The periodogram is real so the complex dft is symetric
 
-            spp::periodogram(signal_volts.begin(), signal_volts.end(), periodogram.begin());
+            spp::periodogram(signal_volts.cbegin(), signal_volts.cend(), periodogram.begin());
 
             const auto max_element = std::max_element(periodogram.begin(), periodogram.end());
 
@@ -89,7 +91,7 @@ void PicoApplication::exec()const
             
             const double max_amp_freq = id_max_element * periodogram_freq_res;
 
-#if 0
+#if PLOT_DEBUG
             if(max_amp_freq < 1e-06)
             {
                 plt::Plot plot;

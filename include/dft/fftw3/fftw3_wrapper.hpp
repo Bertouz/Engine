@@ -23,7 +23,9 @@ inline auto fft1d(InputIte first, InputIte last, OutputIte res)->OutputIte
     auto in_start = std::addressof(*first);
     auto in_end = std::addressof(*last);
     auto out_start = std::addressof(*res);
-    return OutputIte(fft1d_r2c(in_start, in_end, out_start));
+    auto tmp = fft1d_r2c(in_start, in_end, out_start);
+    std::advance(res, std::distance(first, last));
+    return res;
 }
 
 }

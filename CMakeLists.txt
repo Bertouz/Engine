@@ -10,18 +10,18 @@ project(Spp
 #############################
 include(CMakeDependentOption)
 
-option(BUILD_DOC "Build documentation" ON) 
-option(BUILD_TESTS "Build unit testing" ON)
-option(BUILD_EXAMPLES "Build examples" ON)
-option(ENABLE_CODE_COVERAGE "Add gcov/lcov analysis to process" ON)
+option(BUILD_DOC "Build documentation" OFF) 
+option(BUILD_TESTS "Build unit testing" OFF)
+option(BUILD_EXAMPLES "Build examples" OFF)
+option(ENABLE_CODE_COVERAGE "Add gcov/lcov analysis to process" OFF)
 option(ENABLE_CLANG_TIDY "Add clang-tidy analysis to source code" OFF)
-option(ENABLE_CLANG_FORMAT "Add clang-format to build process" ON)
-option(ENABLE_MICRO_BENCHMARKS "Build project microbenchmarks" ON)
+option(ENABLE_CLANG_FORMAT "Add clang-format to build process" OFF)
+option(ENABLE_MICRO_BENCHMARKS "Build project microbenchmarks" OFF)
 option(USE_SUBMODULE "If set to true then we prefer to use the submodule for the dependencies instead of the findpackage" ON)
-option(USE_SCIPLOT "If set to true then we will use sciplot in the project" ON)
+option(USE_SCIPLOT "If set to true then we will use sciplot in the project" OFF)
 set(SHARED_OR_STATIC "STATIC" CACHE STRING "set to shared if you want to build libraries as shared libraries")
 set(TOOLS "pico" CACHE STRING "Semi colon separated list of tools you want to build, possible values are : pico;")
-cmake_dependent_option(ENABLE_MEMCHECK "Add memory check to unit test" ON BUILD_TESTS ON)
+cmake_dependent_option(ENABLE_MEMCHECK "Add memory check to unit test" ON BUILD_TESTS OFF)
 
 
 ####################################
@@ -65,6 +65,12 @@ if(ENABLE_CODE_COVERAGE)
     list(POP_BACK CMAKE_MESSAGE_INDENT )
 endif(ENABLE_CODE_COVERAGE)
 
+#############################
+### Dependencies
+#############################
+# I prefer to look for all the dependecies at the start
+# to avoid a user to look for different find_package in dedicated subdirectory
+# Also if possible I add the possibility to use external dependencies in submodules to simplify a first use
 if(ENABLE_MICRO_BENCHMARKS)
     message(STATUS "Enabling project microbenchmarks")
     list(APPEND CMAKE_MESSAGE_INDENT "  ")
@@ -79,7 +85,12 @@ endif(ENABLE_MICRO_BENCHMARKS)
 # At the moment I only use fftw for dft but in the future I should add other library and give the option to choose one or more
 message(STATUS "Looking for fftw3")
 list(APPEND CMAKE_MESSAGE_INDENT "  ")
-find_package(FFTW3 REQUIRED)
+if(WIN32)
+    set(FFTW_DOUBLE_LIB ON)
+    find_package(FFTW REQUIRED COMPONENTS DOUBLE_LIB )#use "our" cmake file
+else()
+    find_package(FFTW3 REQUIRED)#use fftw cmake file
+endif()
 list(POP_BACK CMAKE_MESSAGE_INDENT )
 
 if(USE_SCIPLOT)
@@ -102,13 +113,6 @@ if(TOOLS)
     add_subdirectory(external/CLI11)
 endif()
 
-
-#############################
-### Dependencies
-#############################
-# I prefer to look for all the dependecies at the start
-# to avoid a user to look for different find_package in dedicated subdirectory
-# Also if possible I add the possibility to use external dependencies in submodules to simplify a first use
 
 if(BUILD_DOC)
 	find_package(Doxygen REQUIRED)

@@ -65,6 +65,12 @@ template<typename T>
 concept RealInputOutputContiguousIterator = RealContiguousIterator<T> && std::input_or_output_iterator<T>;
 
 template<typename T>
+concept RealInputOutputIterator = RealIterator<T> && std::input_or_output_iterator<T>;
+
+template<typename T>
+concept ComplexInputOutputIterator = ComplexIterator<T> && std::input_or_output_iterator<T>;
+
+template<typename T>
 concept ComplexInputOutputContiguousIterator = ComplexContiguousIterator<T> && std::input_or_output_iterator<T>;
 
 template<typename IteType>

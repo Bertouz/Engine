@@ -1,5 +1,6 @@
 #pragma once
 #include <type_traits>
+#include <array>
 
 /**
  * @defgroup dft_policy
@@ -31,7 +32,7 @@ struct complex;
 template<>
 struct complex<policy::Fftw>
 {
-    using type = fftw_complex;
+    using type = std::array<double,2>;
 };
 
 using defaut_cpx_value_type = typename complex<policy::default_type>::type;
