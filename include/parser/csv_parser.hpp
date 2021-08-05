@@ -5,7 +5,7 @@ namespace spp
 {
 
 template<typename TableType>
-void parse_csv_header(std::istream& input, TableType& res_table)
+inline void parse_csv_header(std::istream& input, TableType& res_table)
 {
     const static std::string sep = ",";
 
@@ -28,7 +28,7 @@ void parse_csv_header(std::istream& input, TableType& res_table)
 }
 
 template<typename TableType>
-void parse_csv(std::istream& input, TableType& res_table)
+inline void parse_csv(std::istream& input, TableType& res_table)
 {
     const static std::string sep = ",";
 

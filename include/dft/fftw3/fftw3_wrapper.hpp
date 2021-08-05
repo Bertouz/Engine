@@ -15,7 +15,8 @@ namespace spp // definitions
 {
 namespace fftw
 {
-auto fft1d_r2c( double* first, double* last, fftw_complex* res)->fftw_complex*;
+auto fft1d_r2c( const double* first, const double* last, fftw_complex* res)->fftw_complex*;
+auto fft1d_r2c( const double* first, const double* last, std::complex<double>* res)->std::complex<double>*;
 
 template<RealInputContiguousIterator InputIte, ComplexOutputContiguousIterator OutputIte>
 inline auto fft1d(InputIte first, InputIte last, OutputIte res)->OutputIte
@@ -23,7 +24,9 @@ inline auto fft1d(InputIte first, InputIte last, OutputIte res)->OutputIte
     auto in_start = std::addressof(*first);
     auto in_end = std::addressof(*last);
     auto out_start = std::addressof(*res);
-    return OutputIte(fft1d_r2c(in_start, in_end, out_start));
+    auto tmp = fft1d_r2c(in_start, in_end, out_start);
+    std::advance(res, std::distance(first, last));
+    return res;
 }
 
 }
