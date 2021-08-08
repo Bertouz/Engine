@@ -2,10 +2,21 @@
 
 #include "fftw3/fftw3_wrapper.hpp"
 
+/**
+ * @defgroup Dft
+ * @ingroup Spp
+ */
 
 namespace spp
 {
 
+/**
+ * @brief dft_size_r2c
+ * @param first
+ * @param last
+ * @return
+ * @ingroup Dft
+ */
 template<RealIterator InputIte>
 constexpr auto dft_size_r2c(InputIte first, InputIte last)->size_t
 {
@@ -19,8 +30,8 @@ constexpr auto dft_size_r2c(InputIte first, InputIte last)->size_t
  * @param[in] first -
  * @param[in] last - 
  * @param[out] res - 
- * @addtogroup dft
- */ 
+ * @ingroup Dft
+ */
 template<std::input_iterator InputIte, std::input_or_output_iterator OutputIte>
 inline auto fft1d(InputIte first, InputIte last, OutputIte res)->OutputIte
 {

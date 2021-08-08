@@ -9,9 +9,21 @@ namespace spp
 {
 namespace types
 {
+/**
+ * @ingroup Dft
+ */
 struct R2C{};
+/**
+ * @ingroup Dft
+ */
 struct C2C{};
+/**
+ * @ingroup Dft
+ */
 struct C2R{};
+/**
+ * @ingroup Dft
+ */
 struct R2R{};
 
 namespace internal
@@ -36,10 +48,16 @@ struct DftType<true, true> : R2R
 {};
 }
 
+/**
+ * @ingroup Dft
+ */
 template<typename  T, typename U>
 struct DftType;
 
 
+/**
+ * @ingroup Dft
+ */
 template<typename  T, typename U>
 struct DftType : internal::DftType<IsReal<T>::value, IsReal<U>::value>
 {};

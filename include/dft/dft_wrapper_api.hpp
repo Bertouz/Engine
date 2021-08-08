@@ -2,10 +2,6 @@
 #include "dft_policies.hpp"
 #include <iterator>
 
-/**
- * @defgroup dft
- */
-
 namespace spp
 {
 
@@ -18,7 +14,7 @@ namespace spp
  * @param[in] first -
  * @param[in] last - 
  * @param[out] res - 
- * @addtogroup dft
+ * @ingroup Dft
  */ 
 template<typename Policy, std::input_iterator InputIte, std::input_or_output_iterator OutputIte>
 inline auto fft1d(Policy, InputIte first, InputIte last, OutputIte res)->OutputIte;

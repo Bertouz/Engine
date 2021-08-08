@@ -1,6 +1,39 @@
 #include <istream>
 #include <string>
 #include "utils/conversion.hpp"
+
+
+// Definitions
+namespace spp
+{
+/**
+ * @defgroup Parser
+ * @ingroup Spp
+ */
+
+/**
+ * @brief parse_csv_header - Parse the headers of a csv files into an associative container with the headers as keys
+ * Our compatible csv files are one with the first line containing the header of every column, it is the line we add to the result table
+ * @tparam TableType     - Is an associative container type
+ * @param[in] input      - input stream from wich we take the first line as header
+ * @param[out] res_table - output container in wich we create the keys from the input
+ * @ingroup Parser
+ */
+template<typename TableType>
+inline void parse_csv_header(std::istream& input, TableType& res_table);
+
+/**
+ * @brief parse_csv
+ * @param input
+ * @param res_table
+ * @ingroup Parser
+ */
+template<typename TableType>
+inline void parse_csv(std::istream& input, TableType& res_table);
+
+}
+
+// Declarations
 namespace spp
 {
 
