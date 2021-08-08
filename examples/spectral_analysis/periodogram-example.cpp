@@ -25,7 +25,7 @@ int main()
 
     constexpr double signal_duration = tstop_s - tstart_s;
 
-    constexpr double dt =  signal_duration / n; 
+    constexpr double dt =  signal_duration / n;
 
     constexpr double fe = 1 / dt;
 
@@ -40,7 +40,7 @@ int main()
     static_assert(freq_modu_Hz < fe/2 );
 
     constexpr double amp_modu = 1;
-     
+
     constexpr double amp_carrier = 1;
 
     std::cout<<"tstart_s = "<<tstart_s<<std::endl;
@@ -51,7 +51,7 @@ int main()
     std::cout<<"freq_res = "<<freq_res<<std::endl;
     std::cout<<"freq_carrier_Hz = "<<freq_carrier_Hz<<std::endl;
     std::cout<<"freq_modu_Hz = "<<freq_modu_Hz<<std::endl;
- 
+
     std::vector<double> signal(n);
 
     std::vector<double> t(n);
@@ -66,7 +66,7 @@ int main()
 
     plt::Plot plot;
     plot.palette("set2");
-    plot.drawCurve(t, signal).label("y(t)").lineWidth(4);
+    plot.drawCurve(std::vector<double>(t.begin(), t.begin() +100), std::vector<double>(signal.begin(), signal.begin()+100)).label("y(t)").lineWidth(4);
 
     std::vector<double> f(periodogram.size());
 
@@ -79,7 +79,7 @@ int main()
     plt::Figure figure({{plot}, {plot_spectre}});
     figure.size(749, 749);
     //figure.show();
-    
+
     // Save image for documentation
     std::filesystem::path fftw3_wrapper_image_dir = std::filesystem::path(DOC_IMAGE_BUILD_DIR) / std::filesystem::path("spectral_analysis");
     std::filesystem::create_directories(fftw3_wrapper_image_dir);

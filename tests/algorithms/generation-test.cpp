@@ -3,11 +3,11 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_vector.hpp>
 
-SCENARIO("We want to be able to compute a linear spaced range", "[algorithms][generation][linespace]")
+SCENARIO("We want to be able to compute a linear spaced range starting at zero", "[algorithms][generation][linespace]")
 {
     GIVEN("a vector with a size n = 50 and dt = 5")
     {
-        constexpr int n = 50;
+        constexpr int n = 10;
 
         constexpr double dt = 5;
 
@@ -17,11 +17,50 @@ SCENARIO("We want to be able to compute a linear spaced range", "[algorithms][ge
         {
             spp::linespace(t.begin(), t.end(), dt);
 
-            THEN("We have { 0,5,10,15,20,25,30,35,40,45,50 }")
+            THEN("We have {0.0, 5.0, 10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 45.0}")
             {
-                std::vector<double> ref_linspace{ 0,5,10,15,20,25,30,35,40,45,50 };
+                std::vector<double> ref_linspace{0.0, 5.0, 10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 45.0};
 
-                CHECK_THAT(ref_linspace, Catch::Matchers::Approx(ref_linspace));
+                CHECK_THAT(t, Catch::Matchers::Approx(ref_linspace));
+            }
+        }
+    }
+
+
+}
+
+SCENARIO("We want to be able to compute linear spaced range between two given values", "[algorithms][generation][range]")
+{
+    GIVEN("a vector with a size n = 50 and dt = 5")
+    {
+        constexpr int n = 10;
+
+        std::vector<double> t(n);
+
+        WHEN("calling spp::range(begin, end, -5, 5)")
+        {
+            spp::range(t.begin(), t.end(), -5.0, 5.0);
+
+            THEN("We have 10 values in [-5.. 5]")
+            {
+                std::vector<double> ref_linspace{ -5.0, -3.8888888889, -2.7777777778, -1.6666666667,
+                                                  -0.5555555556, 0.5555555556, 1.6666666667,
+                                                  2.7777777778, 3.8888888889, 5.0 };
+
+                CHECK_THAT(t, Catch::Matchers::Approx(ref_linspace));
+            }
+        }
+
+        WHEN("calling spp::range(begin, end, 0, 10)")
+        {
+            spp::range(t.begin(), t.end(), 0.0, 10.0);
+
+            THEN("We have 10  value in [0.. 10]")
+            {
+                std::vector<double> ref_linspace{ 0.0, 1.1111111111, 2.2222222222, 3.3333333333, 4.4444444444, 5.5555555556,
+                                                  6.6666666667, 7.7777777778, 8.8888888889, 10.0};
+
+                CHECK_THAT(t, Catch::Matchers::Approx(ref_linspace));
             }
         }
     }

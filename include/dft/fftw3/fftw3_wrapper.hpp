@@ -1,8 +1,4 @@
 #pragma once
-/**
- * @defgroup fftw3
- * @addtogroup dft
- */
 #include "fftw3.h"
 #include "dft/dft_policies.hpp"
 #include "dft/dft_wrapper_api.hpp"
@@ -11,13 +7,42 @@
 
 #include <iterator>
 
+/**
+ * @defgroup FFTW3
+ * @ingroup Dft
+ */
+
 namespace spp // definitions
 {
 namespace fftw
 {
+
+/**
+ * @brief fft1d_r2c
+ * @param first
+ * @param last
+ * @param res
+ * @ingroup FFTW3
+ */
 auto fft1d_r2c( const double* first, const double* last, fftw_complex* res)->fftw_complex*;
+
+/**
+ * @brief fft1d_r2c
+ * @param first
+ * @param last
+ * @param res
+ * @ingroup FFTW3
+ */
 auto fft1d_r2c( const double* first, const double* last, std::complex<double>* res)->std::complex<double>*;
 
+/**
+ * @brief fft1d
+ * @param first
+ * @param last
+ * @param res
+ * @return
+ * @ingroup FFTW3
+ */
 template<RealInputContiguousIterator InputIte, ComplexOutputContiguousIterator OutputIte>
 inline auto fft1d(InputIte first, InputIte last, OutputIte res)->OutputIte
 {
@@ -39,7 +64,7 @@ inline auto fft1d(InputIte first, InputIte last, OutputIte res)->OutputIte
  * @param[in] first -
  * @param[in] last - 
  * @param[out] res - 
- * @addtogroup dft
+ * @ingroup FFTW3
  */ 
 template<std::input_iterator InputIte, std::input_or_output_iterator OutputIte>
 inline auto fft1d(dft::policy::Fftw, InputIte first, InputIte last, OutputIte res)->OutputIte

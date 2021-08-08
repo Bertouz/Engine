@@ -5,9 +5,11 @@ list(APPEND CMAKE_MESSAGE_INDENT " ")
 add_executable(testu-algorithms
     main.cpp
     generation-test.cpp
+    test-normalize.cpp
+    test-integration.cpp
     )
 
-target_link_libraries(testu-algorithms PRIVATE Catch2::Catch2)
+target_link_libraries(testu-algorithms PRIVATE Catch2::Catch2 Plot)
 
 target_include_directories(testu-algorithms PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
