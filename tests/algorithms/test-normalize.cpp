@@ -7,8 +7,8 @@
 #include <iostream>
 #include <filesystem>
 
-#include "spectral_analysis/spectral_analysis.hpp"
-#include "plot/plot.hpp"
+#include "engine/spectral_analysis/periodogram.hpp"
+#include "engine/plot/plot.hpp"
 
 
 TEST_CASE("We want to be able to normalize an input range of real data","[algorithms][normalize]")
@@ -22,9 +22,9 @@ TEST_CASE("We want to be able to normalize an input range of real data","[algori
 
     std::generate(random_signal.begin(), random_signal.end(), std::bind(dis, gen));
 
-    spp::normalise(random_signal.begin(), random_signal.end(), random_signal.begin());
+    ngn::normalise(random_signal.begin(), random_signal.end(), random_signal.begin());
 
-    CHECK(spp::integrate(random_signal.begin(), random_signal.end()) == Catch::Approx(1.0));
+    CHECK(ngn::integrate(random_signal.begin(), random_signal.end()) == Catch::Approx(1.0));
 ///! [normalize_real_data]
 }
 
@@ -41,7 +41,7 @@ TEST_CASE("We want to be able to normalize an input range of real data using the
 
     std::vector<double> normalized_signal(10);
 
-    spp::normalise(random_signal.begin(), random_signal.end(), normalized_signal.begin());
+    ngn::normalise(random_signal.begin(), random_signal.end(), normalized_signal.begin());
 
     std::vector<double> ref{
         5.9284461652, 8.4426574426, 8.5794561999, 8.4725173738, 6.235636965,
@@ -79,7 +79,7 @@ TEST_CASE("We want to be able to compute the rms of real data","[algorithms][rms
 
     std::generate(random_signal.begin(), random_signal.end(), std::bind(dis, gen));
 
-    auto rms = spp::rms(random_signal.begin(), random_signal.end());
+    auto rms = ngn::rms(random_signal.begin(), random_signal.end());
 
     CHECK(rms == Catch::Approx(1.5478575322));
 ///! [rms_real_data]

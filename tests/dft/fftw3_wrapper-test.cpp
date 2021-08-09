@@ -1,6 +1,6 @@
-#include "dft/dft.hpp"
-#include "algorithms/generation.hpp"
-#include "complex/algorithms.hpp"
+#include "engine/dft/dft.hpp"
+#include "engine/algorithms/generation.hpp"
+#include "engine/complex/algorithms.hpp"
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_vector.hpp>
 
@@ -34,29 +34,29 @@ SCENARIO("We want to be able to compute the real to complex fft using fftw3 libr
 
         std::vector<double> t(n);
 
-        spp::linespace(t.begin(), t.end(), dt);
+        ngn::linespace(t.begin(), t.end(), dt);
 
-        spp::amplitude_modulated_waveform(t.begin(), t.end(), signal.begin(), amp_carrier, freq_carrier_Hz, amp_modu, freq_modu_Hz);
+        ngn::amplitude_modulated_waveform(t.begin(), t.end(), signal.begin(), amp_carrier, freq_carrier_Hz, amp_modu, freq_modu_Hz);
 
         GIVEN("allocated memory for periodogram")
         {
-            auto spectrum_size = spp::dft_size_r2c(t.begin(), t.end());
+            auto spectrum_size = ngn::dft_size_r2c(t.begin(), t.end());
 
             std::vector<fftw_complex> spectrum(std::move(spectrum_size));// @todo use pmr style allocation 
 
             WHEN("calling fft1d(dft::policy::fftw, signal.begin(), signal.end(), spectrum.begin())")
             {
-                spp::fft1d(spp::dft::policy::fftw, signal.begin(), signal.end(), spectrum.begin()); 
+                ngn::fft1d(ngn::dft::policy::fftw, signal.begin(), signal.end(), spectrum.begin());
 
                 THEN("The periodogram is correctly allocated")
                 {
                     std::vector<double> spectrum_real(spectrum_size);
 
-                    spp::copy_real(spectrum.begin(), spectrum.end(), spectrum_real.begin());
+                    ngn::copy_real(spectrum.begin(), spectrum.end(), spectrum_real.begin());
 
                     std::vector<double> spectrum_imag(spectrum_size);
 
-                    spp::copy_imag(spectrum.begin(), spectrum.end(), spectrum_imag.begin());
+                    ngn::copy_imag(spectrum.begin(), spectrum.end(), spectrum_imag.begin());
 
                     std::vector<double> ref_spectrum_real{ 
                         1.7071067812, 1.7322337742, 1.8140021164, 1.9774196978, 2.2975759404, 

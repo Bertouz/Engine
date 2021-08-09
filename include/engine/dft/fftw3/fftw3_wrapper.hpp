@@ -1,9 +1,9 @@
 #pragma once
 #include "fftw3.h"
-#include "dft/dft_policies.hpp"
-#include "dft/dft_wrapper_api.hpp"
-#include "dft/dft_types.hpp"
-#include "complex/concepts.hpp"
+#include "engine/dft/dft_policies.hpp"
+#include "engine/dft/dft_wrapper_api.hpp"
+#include "engine/dft/dft_types.hpp"
+#include "engine/complex/concepts.hpp"
 
 #include <iterator>
 
@@ -12,7 +12,7 @@
  * @ingroup Dft
  */
 
-namespace spp // definitions
+namespace ngn // definitions
 {
 namespace fftw
 {

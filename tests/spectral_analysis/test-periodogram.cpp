@@ -1,6 +1,6 @@
-#include "spectral_analysis/spectral_analysis.hpp"
-#include "algorithms/generation.hpp"
-#include "plot/plot.hpp"
+#include "engine/spectral_analysis/periodogram.hpp"
+#include "engine/algorithms/generation.hpp"
+#include "engine/plot/plot.hpp"
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_vector.hpp>
 
@@ -34,17 +34,17 @@ SCENARIO("We want to compute the periodogram of a real waveform", "[periodogram]
 
         std::vector<double> t(n);
 
-        spp::linespace(t.begin(), t.end(), dt);
+        ngn::linespace(t.begin(), t.end(), dt);
 
-        spp::amplitude_modulated_waveform(t.begin(), t.end(), signal.begin(), amp_carrier, freq_carrier_Hz, amp_modu, freq_modu_Hz);
+        ngn::amplitude_modulated_waveform(t.begin(), t.end(), signal.begin(), amp_carrier, freq_carrier_Hz, amp_modu, freq_modu_Hz);
 
         GIVEN("allocated memory for periodogram")
         {
             std::vector<double> periodogram(n/2+1);
 
-            WHEN("calling spp::periodogram(signal.begin(), signal.end(), periodogram.begin())")
+            WHEN("calling ngn::periodogram(signal.begin(), signal.end(), periodogram.begin())")
             {
-                spp::periodogram(signal.begin(), signal.end(), periodogram.begin());
+                ngn::periodogram(signal.begin(), signal.end(), periodogram.begin());
 
                 THEN("The periodogram is correctly allocated")
                 {
@@ -56,7 +56,7 @@ SCENARIO("We want to compute the periodogram of a real waveform", "[periodogram]
 
                     std::vector<double> f(periodogram.size());
 
-                    spp::linespace(f.begin(), f.end(), freq_res);
+                    ngn::linespace(f.begin(), f.end(), freq_res);
 
                     /// Plot to check the result values
                     //plt::Plot plot_spectre;

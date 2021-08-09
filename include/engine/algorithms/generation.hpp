@@ -1,14 +1,11 @@
+#pragma once
 #include <iterator>
 #include <algorithm>
 #include <numbers>
 #include <cmath>
 #include <iostream>
 
-/**
- * @defgroup Algorithms
- * @ingroup Spp
- */
-namespace spp
+namespace ngn
 {
 
 /**
@@ -49,7 +46,7 @@ inline auto amplitude_modulated_waveform(IteIn first, IteIn last, IteOut res, T 
 
 }
 
-namespace spp
+namespace ngn
 {
 
 template<std::forward_iterator Ite, typename T>

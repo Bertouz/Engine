@@ -1,11 +1,10 @@
-#ifndef INTEGRATION_HPP
-#define INTEGRATION_HPP
+#pragma once
 
-#include "complex/concepts.hpp"
+#include "engine/complex/concepts.hpp"
 #include <numeric>
 #include <iostream>
 
-namespace spp {
+namespace ngn {
 
 /**
  * @brief integrate - compute the default integral of the given range
@@ -77,7 +76,7 @@ inline auto normalise(InputIte first, InputIte last, OutputIte res, Func f)->Out
 
 }
 
-namespace spp
+namespace ngn
 {
 
 template<RealInputOutputIterator InputIte>
@@ -123,4 +122,3 @@ inline auto normalise(InputIte first, InputIte last, OutputIte res)->OutputIte
 
 }
 
-#endif // INTEGRATION_HPP

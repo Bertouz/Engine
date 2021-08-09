@@ -1,14 +1,11 @@
+#pragma once
 #include "concepts.hpp"
 #include <functional>
 #include <algorithm>
 #include <complex>
 
 // definitions
-/**
- * @defgroup Complex
- * @ingroup Spp
- */
-namespace spp
+namespace ngn
 {
 /**
  * @brief real - return the real value of array as complex type like fftw_complex
@@ -28,15 +25,15 @@ template<CComplex T>
 constexpr auto imag(const T& cpx);
 
 /**
- * @brief real
- * @param cpx
+ * @brief real -Return the real part of a std complex
+ * @param[in] cpx
  * @ingroup Complex
  */
 template<StdComplex T>
 constexpr auto real(const T& cpx);
 
 /**
- * @brief imag
+ * @brief imag - Return the imaginary part of a std complex
  * @param cpx
  * @ingroup Complex
  */
@@ -55,7 +52,7 @@ template<ComplexIterator InputIte, RealIterator OutputIte>
 inline auto norm(InputIte first, InputIte last, OutputIte res)->OutputIte;
 
 /**
- * @brief norm
+ * @brief norm - compute the |cpx|^2 of a fftw_complex style complex number
  * @param cpx
  * @ingroup Complex
  */
@@ -94,7 +91,7 @@ inline auto copy_imag(InputIte first, InputIte last, OutputIte res)->OutputIte;
 }
 
 // declarations
-namespace  spp{
+namespace  ngn{
 
 template<CComplex T>
 constexpr auto real(const T& cpx)

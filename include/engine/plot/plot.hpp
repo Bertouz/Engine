@@ -7,10 +7,6 @@
 
 // for the moment I will just do it this way but on the long run I should wrap sciplot library with my own plotting interface to avoid to much coupling
 
-/**
- * @defgroup Plot
- * @ingroup Spp
- */
 
 namespace plt = sciplot;
 

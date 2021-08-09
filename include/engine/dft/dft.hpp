@@ -2,12 +2,8 @@
 
 #include "fftw3/fftw3_wrapper.hpp"
 
-/**
- * @defgroup Dft
- * @ingroup Spp
- */
 
-namespace spp
+namespace ngn
 {
 
 /**

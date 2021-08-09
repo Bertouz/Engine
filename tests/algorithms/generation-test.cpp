@@ -1,5 +1,5 @@
 #include <vector>
-#include "algorithms/generation.hpp"
+#include "engine/algorithms/generation.hpp"
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_vector.hpp>
 
@@ -13,9 +13,9 @@ SCENARIO("We want to be able to compute a linear spaced range starting at zero",
 
         std::vector<double> t(n);
 
-        WHEN("calling spp::linespace")
+        WHEN("calling ngn::linespace")
         {
-            spp::linespace(t.begin(), t.end(), dt);
+            ngn::linespace(t.begin(), t.end(), dt);
 
             THEN("We have {0.0, 5.0, 10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 45.0}")
             {
@@ -37,9 +37,9 @@ SCENARIO("We want to be able to compute linear spaced range between two given va
 
         std::vector<double> t(n);
 
-        WHEN("calling spp::range(begin, end, -5, 5)")
+        WHEN("calling ngn::range(begin, end, -5, 5)")
         {
-            spp::range(t.begin(), t.end(), -5.0, 5.0);
+            ngn::range(t.begin(), t.end(), -5.0, 5.0);
 
             THEN("We have 10 values in [-5.. 5]")
             {
@@ -51,9 +51,9 @@ SCENARIO("We want to be able to compute linear spaced range between two given va
             }
         }
 
-        WHEN("calling spp::range(begin, end, 0, 10)")
+        WHEN("calling ngn::range(begin, end, 0, 10)")
         {
-            spp::range(t.begin(), t.end(), 0.0, 10.0);
+            ngn::range(t.begin(), t.end(), 0.0, 10.0);
 
             THEN("We have 10  value in [0.. 10]")
             {
@@ -98,11 +98,11 @@ SCENARIO("We want to be able to compute an amplitude modulated waveform", "[algo
 
         std::vector<double> t(n);
 
-        spp::linespace(t.begin(), t.end(), dt);
+        ngn::linespace(t.begin(), t.end(), dt);
 
-        WHEN("calling spp::amplitude_modulated_waveform")
+        WHEN("calling ngn::amplitude_modulated_waveform")
         {
-            spp::amplitude_modulated_waveform(t.begin(), t.end(), signal.begin(), amp_carrier, freq_carrier_Hz, amp_modu, freq_modu_Hz);
+            ngn::amplitude_modulated_waveform(t.begin(), t.end(), signal.begin(), amp_carrier, freq_carrier_Hz, amp_modu, freq_modu_Hz);
 
             THEN("We have an amplitude modulated waveforme")
             {

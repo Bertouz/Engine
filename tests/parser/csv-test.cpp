@@ -1,4 +1,4 @@
-#include "parser/csv_parser.hpp"
+#include "engine/parser/csv_parser.hpp"
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_vector.hpp>
 #include <iostream>
@@ -41,7 +41,7 @@ SCENARIO("We want to parse a csv file ","[parser][csv]")
 
         WHEN("using parse_csv(*inputs, table);")
         {
-            spp::parse_csv(*inputs, table);
+            ngn::parse_csv(*inputs, table);
 
             THEN("We extract correctly the data")
             {
