@@ -16,19 +16,19 @@
     <img src="doc/images/logo.jpg" alt="Logo" width="160" height="160">
   </a>
 
-  <h3 align="center">SignalProcessingPipeline (SPP)</h3>
+  <h3 align="center">Engine (NGN)</h3>
 
   <p align="center">
-   A small project for building signal processing pipelines in c++
+   A small project for the common code for my science project, this project only contains tools and note scientific domain specific knowledge 
     <br />
-    <a href="https://github.com/Bertouz/SignalProcessingPipeline"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/Bertouz/Engine"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/Bertouz/SignalProcessingPipeline">View Demo</a>
+    <a href="https://github.com/Bertouz/Engine">View Demo</a>
     ·
-    <a href="https://github.com/Bertouz/SignalProcessingPipeline/issues">Report Bug</a>
+    <a href="https://github.com/Bertouz/Engine/issues">Report Bug</a>
     ·
-    <a href="https://github.com/Bertouz/SignalProcessingPipeline/issues">Request Feature</a>
+    <a href="https://github.com/Bertouz/Engine/issues">Request Feature</a>
   </p>
 </p>
 
@@ -62,7 +62,7 @@
 
 ## About The Project
 
-Signal Processing Pipeline (SPP) is a simple project that started as an interview exercice but ended in a project for building 1d signal processing pipelines.  
+Engine (NGN) 
 
 Aims :  
 + Provide primitive for building powerfull processing algorithms
@@ -146,7 +146,7 @@ Now that you have installed the dependencies you need you just have to compile a
 
 1. Clone the repo
 ```sh
-git clone https://github.com/Bertouz/SignalProcessingPipeline
+git clone https://github.com/Bertouz/Engine
 ```
 2. Build project
 ```sh
@@ -163,7 +163,7 @@ make install
 
 ## Roadmap
 
-See the [open issues](https://github.com/Bertouz/SignalProcessingPipeline/issues) for a list of proposed features (and known issues).
+See the [open issues](https://github.com/Bertouz/Engine/issues) for a list of proposed features (and known issues).
 
 ## Contributing
 
@@ -189,14 +189,14 @@ Contributions are what make the open source community such an amazing place to b
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/Bertouz/SignalProcessingPipeline
-[contributors-url]: https://github.com/Bertouz/SignalProcessingPipeline/graphs/contributors
-[forks-shield]:  https://img.shields.io/github/forks/Bertouz/SignalProcessingPipeline
-[forks-url]: https://github.com/Bertouz/SignalProcessingPipeline/network/members
-[issues-shield]: https://img.shields.io/github/issues-raw/Bertouz/SignalProcessingPipeline 
-[issues-url]: https://github.com/Bertouz/SignalProcessingPipeline/issues
-[license-shield]: https://img.shields.io/github/license/Bertouz/SignalProcessingPipeline
-[license-url]: https://github.com/Bertouz/SignalProcessingPipeline/blob/release/LICENSE 
+[contributors-shield]: https://img.shields.io/github/contributors/Bertouz/Engine
+[contributors-url]: https://github.com/Bertouz/Engine/graphs/contributors
+[forks-shield]:  https://img.shields.io/github/forks/Bertouz/Engine
+[forks-url]: https://github.com/Bertouz/Engine/network/members
+[issues-shield]: https://img.shields.io/github/issues-raw/Bertouz/Engine 
+[issues-url]: https://github.com/Bertouz/Engine/issues
+[license-shield]: https://img.shields.io/github/license/Bertouz/Engine
+[license-url]: https://github.com/Bertouz/Engine/blob/release/LICENSE 
 [product-screenshot]: images/doc/images/Logo_template.png
-[build-shield]: https://img.shields.io/github/workflow/status/Bertouz/SignalProcessingPipeline/Build/release
-[build-url]: https://github.com/Bertouz/SignalProcessingPipeline/workflows/Build
+[build-shield]: https://img.shields.io/github/workflow/status/Bertouz/Engine/Build/release
+[build-url]: https://github.com/Bertouz/Engine/workflows/Build

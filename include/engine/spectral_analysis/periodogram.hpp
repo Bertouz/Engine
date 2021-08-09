@@ -1,16 +1,13 @@
-#include "dft/dft.hpp"
+#pragma once
+#include "engine/dft.hpp"
+#include "engine/complex.hpp"
 #include <algorithm>
 #include <functional>
 #include <numeric>
-#include "complex/algorithms.hpp"
-#include "algorithms/integration.hpp"
+#include "engine/algorithms.hpp"
 
 //Declarations
-/**
- * @defgroup SpectralAnalysis
- * @ingroup Spp
- */
-namespace spp
+namespace ngn
 {
 
 /**
@@ -34,7 +31,7 @@ inline auto periodogram(InputIte first, InputIte last, OutputIte res)->OutputIte
 
 
 //Definitions
-namespace spp
+namespace ngn
 {
 
 template<RealInputOutputIterator InputIte, RealInputOutputIterator OutputIte>
@@ -48,7 +45,7 @@ inline auto periodogram(InputIte first, InputIte last, OutputIte res)->OutputIte
 
     fft1d(first, last, spectrum.begin());
 
-    OutputIte res_last = spp::norm(spectrum.cbegin(), spectrum.cend(), res);
+    OutputIte res_last = norm(spectrum.cbegin(), spectrum.cend(), res);
 
     // We normalize the periodogram with the rms
     normalise(res, res_last, res, rms<OutputIte>);

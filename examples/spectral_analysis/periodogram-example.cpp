@@ -1,7 +1,7 @@
-#include "dft/dft.hpp"
-#include "plot/plot.hpp"
-#include "spectral_analysis/spectral_analysis.hpp"
-#include "algorithms/generation.hpp"
+#include "engine/dft/dft.hpp"
+#include "engine/plot/plot.hpp"
+#include "engine/spectral_analysis/periodogram.hpp"
+#include "engine/algorithms/generation.hpp"
 
 #include <sstream>
 #include <functional>
@@ -56,13 +56,13 @@ int main()
 
     std::vector<double> t(n);
 
-    spp::linespace(t.begin(), t.end(), dt);
+    ngn::linespace(t.begin(), t.end(), dt);
 
-    spp::amplitude_modulated_waveform(t.begin(), t.end(), signal.begin(), amp_carrier, freq_carrier_Hz, amp_modu, freq_modu_Hz);
+    ngn::amplitude_modulated_waveform(t.begin(), t.end(), signal.begin(), amp_carrier, freq_carrier_Hz, amp_modu, freq_modu_Hz);
 
     std::vector<double> periodogram(n/2+1);
 
-    spp::periodogram(signal.begin(), signal.end(), periodogram.begin());
+    ngn::periodogram(signal.begin(), signal.end(), periodogram.begin());
 
     plt::Plot plot;
     plot.palette("set2");
@@ -70,7 +70,7 @@ int main()
 
     std::vector<double> f(periodogram.size());
 
-    spp::linespace(f.begin(), f.end(), freq_res);
+    ngn::linespace(f.begin(), f.end(), freq_res);
 
     plt::Plot plot_spectre;
     plot_spectre.palette("set2");

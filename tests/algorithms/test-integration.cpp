@@ -5,8 +5,8 @@
 #include <catch2/catch_approx.hpp>
 #include <iostream>
 
-#include "algorithms/integration.hpp"
-#include "algorithms/generation.hpp"
+#include "engine/algorithms/integration.hpp"
+#include "engine/algorithms/generation.hpp"
 
 
 TEST_CASE("We want to be able to compute the integral of an input range of real data","[algorithms][integration]")
@@ -18,10 +18,10 @@ TEST_CASE("We want to be able to compute the integral of an input range of real 
     std::vector<double> x(3000);
     constexpr double a = 0.0;
     constexpr double b = 10.0;
-    spp::range(x.begin(), x.end(), a, b);
+    ngn::range(x.begin(), x.end(), a, b);
     std::vector<double> x2(x.size());
     std::transform(x.begin(), x.end(), x2.begin(),[](auto x){return x*x;});
-    const auto I = spp::integrate(x2.begin(), x2.end()) * (b - a);
+    const auto I = ngn::integrate(x2.begin(), x2.end()) * (b - a);
     CHECK(I == Catch::Approx(1000.0/3).epsilon(0.1));
 ///! [integration_real_data_default_01]
   }
@@ -32,10 +32,10 @@ TEST_CASE("We want to be able to compute the integral of an input range of real 
     std::vector<double> x(3000);
     constexpr double a = 0.0;
     constexpr double b = 10.0;
-    spp::range(x.begin(), x.end(), a, b);
+    ngn::range(x.begin(), x.end(), a, b);
     std::vector<double> x2(x.size());
     std::transform(x.begin(), x.end(), x2.begin(),[](auto x){return x*x;});
-    const auto I = spp::integrate(x2.begin(), x2.end(), a, b);
+    const auto I = ngn::integrate(x2.begin(), x2.end(), a, b);
     CHECK(I == Catch::Approx(1000.0/3).epsilon(0.1));
 ///! [integration_real_data_default_ab]
   }

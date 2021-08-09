@@ -4,7 +4,7 @@
 #include <type_traits>
 #include <complex>
 
-namespace spp 
+namespace ngn
 {
 ///@note ce sont plus des concepts sur les complex... 
 

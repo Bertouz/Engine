@@ -2,7 +2,7 @@
 #include "dft_policies.hpp"
 #include <iterator>
 
-namespace spp
+namespace ngn
 {
 
 

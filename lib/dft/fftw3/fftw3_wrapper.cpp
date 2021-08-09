@@ -1,6 +1,6 @@
-#include "dft/fftw3/fftw3_wrapper.hpp"
+#include "engine/dft/fftw3/fftw3_wrapper.hpp"
 
-namespace spp
+namespace ngn
 {
 namespace fftw
 {

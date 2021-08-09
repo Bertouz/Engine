@@ -1,15 +1,12 @@
+#pragma once
 #include <istream>
 #include <string>
-#include "utils/conversion.hpp"
+#include "engine/utils/conversion.hpp"
 
 
 // Definitions
-namespace spp
+namespace ngn
 {
-/**
- * @defgroup Parser
- * @ingroup Spp
- */
 
 /**
  * @brief parse_csv_header - Parse the headers of a csv files into an associative container with the headers as keys
@@ -34,7 +31,7 @@ inline void parse_csv(std::istream& input, TableType& res_table);
 }
 
 // Declarations
-namespace spp
+namespace ngn
 {
 
 template<typename TableType>

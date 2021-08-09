@@ -2,7 +2,7 @@
 #include <type_traits>
 #include <array>
 
-namespace spp 
+namespace ngn
 {
 namespace dft
 {

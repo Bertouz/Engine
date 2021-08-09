@@ -1,10 +1,14 @@
 #include <string>
 
-namespace spp
+namespace ngn
 {
     template<typename From, typename To>
     struct Convert;
 
+    /**
+     * @brief The Convert struct
+     * @ingroup Utils
+     */
     template<>
     struct Convert<std::string, double>
     {

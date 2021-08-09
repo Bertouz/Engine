@@ -2,12 +2,12 @@
 #include <map>
 #include <set>
 #include <iostream>
-#include "parser/csv_parser.hpp"
-#include "spectral_analysis/spectral_analysis.hpp"
+#include "engine/parser/csv_parser.hpp"
+#include "engine/spectral_analysis/periodogram.hpp"
 #if PLOT_DEBUG
 #include "plot/plot.hpp"
 #endif
-#include "algorithms/generation.hpp"
+#include "engine/algorithms/generation.hpp"
 
 const static std::map<std::string, std::string> format_ext_mapper{{"csv",".csv"}};
 
@@ -62,7 +62,7 @@ void PicoApplication::exec()const
 
         std::map<std::string, std::vector<double>> curr_table;
         
-        spp::parse_csv(ifs_curr, curr_table);
+        ngn::parse_csv(ifs_curr, curr_table);
 
         if(curr_table.size() == 2) 
         {
@@ -81,7 +81,7 @@ void PicoApplication::exec()const
 
             std::vector<double> periodogram(nb_points / 2 + 1);// The periodogram is real so the complex dft is symetric
 
-            spp::periodogram(signal_volts.cbegin(), signal_volts.cend(), periodogram.begin());
+            ngn::periodogram(signal_volts.cbegin(), signal_volts.cend(), periodogram.begin());
 
             const auto max_element = std::max_element(periodogram.begin(), periodogram.end());
 
@@ -100,7 +100,7 @@ void PicoApplication::exec()const
 
                 std::vector<double> f(periodogram.size());
 
-                spp::linespace(f.begin(), f.end(), periodogram_freq_res);
+                ngn::linespace(f.begin(), f.end(), periodogram_freq_res);
 
                 plt::Plot plot_spectre;
                 plot_spectre.palette("set2");
