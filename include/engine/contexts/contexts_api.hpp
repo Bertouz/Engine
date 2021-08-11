@@ -26,10 +26,21 @@ std::future<void> post(ContextType& context, FuncType f, tokens::UseFuture);
 /**
  * @brief wait - wait for the context to finish all its task before returning
  * @param context
+ * @ingroup Contexts
  */
 template<typename ContextType>
 void wait(ContextType& context);
 
+
+/**
+ * @brief start - Request the context to start all its worker to process tasks
+ * If the context is already processing tasks then the fonction does nothing
+ * The function return as soon as all worker are started
+ * @param context - context we want to start
+ * @ingroup Contexts
+ */
+template<typename ContextType>
+void start(ContextType& context);
 
 
 }
