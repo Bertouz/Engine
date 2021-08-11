@@ -1,6 +1,6 @@
 #pragma once
 
 /**
- * @defgroup ExecutionContexts
+ * @defgroup Contexts
  * @ingroup Engine
   */
