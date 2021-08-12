@@ -60,7 +60,7 @@ if(ENABLE_CODE_COVERAGE)
         NAME coverage
         EXECUTABLE ctest
         DEPENCIES testu
-        EXCLUDE tests
+        EXCLUDE tests examples tools external doc _build build doc
         )
     list(POP_BACK CMAKE_MESSAGE_INDENT )
 endif(ENABLE_CODE_COVERAGE)

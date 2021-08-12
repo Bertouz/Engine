@@ -10,6 +10,8 @@ if(Doxygen_FOUND)
     # request to configure the file
     configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
 
+    configure_file(coverage.dox.in ${CMAKE_BINARY_DIR}/coverage/coverage.dox @ONLY)
+
     file(GLOB_RECURSE PUBLIC_HEADERS "${CMAKE_SOURCE_DIR}/include" PATTERN *.h*)
     file(GLOB_RECURSE PRIVATE_HEADERS "${CMAKE_SOURCE_DIR}/lib" PATTERN *.h*)
 

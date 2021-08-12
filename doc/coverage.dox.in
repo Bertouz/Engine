@@ -1,0 +1,3 @@
+/*! \page Coverage Resume of code coverage
+ <a href="@CMAKE_BINARY_DIR@/coverage/index.html">link to code coverage results</a>
+*/
