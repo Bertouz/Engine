@@ -1,8 +1,9 @@
 #pragma once
-#include <future>
 #include "tokens.hpp"
+#include <future>
 
-namespace ngn {
+namespace ngn
+{
 
 /**
  * @brief post - Give a callable to a context to be run
@@ -10,8 +11,7 @@ namespace ngn {
  * @param f - Callable which must have a signature void() if not explicitly said otherwise
  * @ingroup Contexts
  */
-template<typename ContextType, typename FuncType>
-void post(ContextType& context, FuncType f);
+template <typename ContextType, typename FuncType> void post(ContextType &context, FuncType f);
 
 /**
  * @brief post - Give a callable to a context to be run and give the future associated to the use
@@ -20,17 +20,15 @@ void post(ContextType& context, FuncType f);
  * @return thre future of the task so  that the user can wait on it
  * @ingroup Contexts
  */
-template<typename ContextType, typename FuncType>
-std::future<void> post(ContextType& context, FuncType f, tokens::UseFuture);
+template <typename ContextType, typename FuncType>
+std::future<void> post(ContextType &context, FuncType f, tokens::UseFuture);
 
 /**
  * @brief wait - wait for the context to finish all its task before returning
  * @param context
  * @ingroup Contexts
  */
-template<typename ContextType>
-void wait(ContextType& context);
-
+template <typename ContextType> void wait(ContextType &context);
 
 /**
  * @brief start - Request the context to start all its worker to process tasks
@@ -39,8 +37,6 @@ void wait(ContextType& context);
  * @param context - context we want to start
  * @ingroup Contexts
  */
-template<typename ContextType>
-void start(ContextType& context);
+template <typename ContextType> void start(ContextType &context);
 
-
-}
+} // namespace ngn

@@ -1,6 +1,6 @@
 #pragma once
 
 /**
-  * @defgroup MemoryResources
-  * @ingroup Engine
-  */
+ * @defgroup MemoryResources
+ * @ingroup Engine
+ */
