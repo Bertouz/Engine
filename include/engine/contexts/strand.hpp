@@ -1,59 +1,52 @@
 #pragma once
-#include <thread>
-#include <queue>
 #include "contexts_api.hpp"
 #include <iostream>
+#include <queue>
+#include <thread>
 
-namespace ngn {
+namespace ngn
+{
 
 struct Strand;
 
-template<typename FuncType>
-void post(Strand& context, FuncType f);
+template <typename FuncType> void post(Strand &context, FuncType f);
 
-template<typename FuncType>
-std::future<void> post(Strand& context, FuncType f, tokens::UseFuture);
+template <typename FuncType> std::future<void> post(Strand &context, FuncType f, tokens::UseFuture);
 
-void wait(Strand& context);
+void wait(Strand &context);
 
-void start(Strand& context);
+void start(Strand &context);
 
 struct Strand
 {
-  ~Strand();
+    ~Strand();
 
-  template<typename FuncType>
-  friend void post(Strand& context, FuncType f);
+    template <typename FuncType> friend void post(Strand &context, FuncType f);
 
-  template<typename FuncType>
-  friend std::future<void> post(Strand& context, FuncType f, tokens::UseFuture);
+    template <typename FuncType> friend std::future<void> post(Strand &context, FuncType f, tokens::UseFuture);
 
-  friend void wait(Strand& context);
+    friend void wait(Strand &context);
 
-  friend void start(Strand& context);
+    friend void start(Strand &context);
 
-private:
+  private:
+    std::queue<std::packaged_task<void()>> _task_queue;
+    std::thread _thread;
+    std::mutex _mutex;
+    std::condition_variable _cv;
 
-  std::queue<std::packaged_task<void()>> _task_queue;
-  std::thread _thread;
-  std::mutex _mutex;
-  std::condition_variable _cv;
-
-  // maybe use an enum for status
-  bool _is_running:1 = false;
-  bool _stop:1 = false;
+    // maybe use an enum for status
+    bool _is_running : 1 = false;
+    bool _stop : 1 = false;
 };
 
-
-template<typename FuncType>
-void post(Strand& context, FuncType f)
+template <typename FuncType> void post(Strand &context, FuncType f)
 {
-   context._task_queue.push(std::packaged_task<void()>(std::move(f)));
-   start(context);
+    context._task_queue.push(std::packaged_task<void()>(std::move(f)));
+    start(context);
 }
 
-template<typename FuncType>
-std::future<void> post(Strand& context, FuncType f, tokens::UseFuture)
+template <typename FuncType> std::future<void> post(Strand &context, FuncType f, tokens::UseFuture)
 {
     auto task = std::packaged_task<void()>(std::move(f));
     auto future = task.get_future();
@@ -62,5 +55,4 @@ std::future<void> post(Strand& context, FuncType f, tokens::UseFuture)
     return future;
 }
 
-
-}
+} // namespace ngn

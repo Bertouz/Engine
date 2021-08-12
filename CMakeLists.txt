@@ -23,7 +23,6 @@ set(SHARED_OR_STATIC "STATIC" CACHE STRING "set to shared if you want to build l
 set(TOOLS "pico" CACHE STRING "Semi colon separated list of tools you want to build, possible values are : pico;")
 cmake_dependent_option(ENABLE_MEMCHECK "Add memory check to unit test" ON BUILD_TESTS OFF)
 
-
 ####################################
 ### Include cmake scripts and config
 ####################################
@@ -38,6 +37,7 @@ include(CMakePackageConfigHelpers)
 include(FindPackageHandleStandardArgs)
 
 if(ENABLE_CLANG_TIDY)
+    set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
     message(STATUS "Enabling code static analysis with clang-tidy")
     list(APPEND CMAKE_MESSAGE_INDENT "  ")
     include(UseClangTidy)
@@ -60,7 +60,7 @@ if(ENABLE_CODE_COVERAGE)
         NAME coverage
         EXECUTABLE ctest
         DEPENCIES testu
-        EXCLUDE tests
+        EXCLUDE tests examples tools external doc _build build doc
         )
     list(POP_BACK CMAKE_MESSAGE_INDENT )
 endif(ENABLE_CODE_COVERAGE)

@@ -1,10 +1,11 @@
 #pragma once
 
 #include "engine/complex/concepts.hpp"
-#include <numeric>
 #include <iostream>
+#include <numeric>
 
-namespace ngn {
+namespace ngn
+{
 
 /**
  * @brief integrate - compute the default integral of the given range
@@ -15,8 +16,7 @@ namespace ngn {
  * @snippet algorithms/test-integration.cpp integration_real_data_default_01
  * @ingroup Algorithms
  */
-template<RealInputOutputIterator InputIte>
-inline auto integrate(InputIte first, InputIte last);
+template <RealInputOutputIterator InputIte> inline auto integrate(InputIte first, InputIte last);
 
 /**
  * @brief integrate - compute the default integral of the given range
@@ -29,8 +29,7 @@ inline auto integrate(InputIte first, InputIte last);
  * @snippet algorithms/test-integration.cpp integration_real_data_default_ab
  * @ingroup Algorithms
  */
-template<RealInputOutputIterator InputIte, Real T>
-inline auto integrate(InputIte first, InputIte last, T a, T b);
+template <RealInputOutputIterator InputIte, Real T> inline auto integrate(InputIte first, InputIte last, T a, T b);
 
 /**
  * @brief rms
@@ -38,8 +37,7 @@ inline auto integrate(InputIte first, InputIte last, T a, T b);
  * @param last
  * @snippet algorithms/test-normalize.cpp rms_real_data
  */
-template<RealInputOutputIterator InputIte>
-inline auto rms(InputIte first, InputIte last);
+template <RealInputOutputIterator InputIte> inline auto rms(InputIte first, InputIte last);
 
 /**
  * @brief normalise - Normalize the input range so that sum(first, last) / N = 1
@@ -53,8 +51,8 @@ inline auto rms(InputIte first, InputIte last);
  * @ingroup Algorithms
  * @return
  */
-template<RealInputOutputIterator InputIte, RealInputOutputIterator OutputIte>
-inline auto normalise(InputIte first, InputIte last, OutputIte res)->OutputIte;
+template <RealInputOutputIterator InputIte, RealInputOutputIterator OutputIte>
+inline auto normalise(InputIte first, InputIte last, OutputIte res) -> OutputIte;
 
 /**
  * @brief normalise - Normalize the input range so that sum(first, last) / N = 1
@@ -71,54 +69,46 @@ inline auto normalise(InputIte first, InputIte last, OutputIte res)->OutputIte;
  * @return
 
  */
-template<RealInputOutputIterator InputIte, RealInputOutputIterator OutputIte, typename Func>
-inline auto normalise(InputIte first, InputIte last, OutputIte res, Func f)->OutputIte;
+template <RealInputOutputIterator InputIte, RealInputOutputIterator OutputIte, typename Func>
+inline auto normalise(InputIte first, InputIte last, OutputIte res, Func f) -> OutputIte;
 
-}
+} // namespace ngn
 
 namespace ngn
 {
 
-template<RealInputOutputIterator InputIte>
-inline auto rms(InputIte first, InputIte last)
+template <RealInputOutputIterator InputIte> inline auto rms(InputIte first, InputIte last)
 {
-    auto sum2 = std::accumulate(first, last, 0.0, [](auto first, auto curr){
-       return first + curr*curr;
-    });
+    auto sum2 = std::accumulate(first, last, 0.0, [](auto first, auto curr) { return first + curr * curr; });
     auto size = std::distance(first, last);
 
-    return std::sqrt( std::move(sum2) / std::move(size));
+    return std::sqrt(std::move(sum2) / std::move(size));
 }
 
-template<RealInputOutputIterator InputIte>
-inline auto integrate(InputIte first, InputIte last)
+template <RealInputOutputIterator InputIte> inline auto integrate(InputIte first, InputIte last)
 {
     return integrate(first, last, 0.0, 1.0);
 }
 
-template<RealInputOutputIterator InputIte, Real T>
-inline auto integrate(InputIte first, InputIte last, T a, T b)
+template <RealInputOutputIterator InputIte, Real T> inline auto integrate(InputIte first, InputIte last, T a, T b)
 {
-  return std::reduce(first, last) * (b - a) / std::distance(first, last);
+    return std::reduce(first, last) * (b - a) / std::distance(first, last);
 }
 
-
-template<RealInputOutputIterator InputIte, RealInputOutputIterator OutputIte, typename Func>
-inline auto normalise(InputIte first, InputIte last, OutputIte res, Func fun)->OutputIte
+template <RealInputOutputIterator InputIte, RealInputOutputIterator OutputIte, typename Func>
+inline auto normalise(InputIte first, InputIte last, OutputIte res, Func fun) -> OutputIte
 {
     const auto normalisation_factor = fun(first, last);
 
-    OutputIte res_last = std::transform(first, last, res, [normalisation_factor](auto const& value){
-        return value / normalisation_factor;
-    });
+    OutputIte res_last = std::transform(
+        first, last, res, [normalisation_factor](auto const &value) { return value / normalisation_factor; });
     return res_last;
 }
 
-template<RealInputOutputIterator InputIte, RealInputOutputIterator OutputIte>
-inline auto normalise(InputIte first, InputIte last, OutputIte res)->OutputIte
+template <RealInputOutputIterator InputIte, RealInputOutputIterator OutputIte>
+inline auto normalise(InputIte first, InputIte last, OutputIte res) -> OutputIte
 {
     return normalise(first, last, res, integrate<InputIte>);
 }
 
-}
-
+} // namespace ngn

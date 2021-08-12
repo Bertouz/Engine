@@ -5,17 +5,21 @@
  * @ingroup Contexts
  */
 
-namespace ngn {
+namespace ngn
+{
 
-namespace tokens {
+namespace tokens
+{
 
-    /**
-    * @brief The UseFuture struct - Tag indicating that we want to use the future associated with an asynchronous task
-    * @ingroup Tokens
-    */
-   struct UseFuture{};
+/**
+ * @brief The UseFuture struct - Tag indicating that we want to use the future associated with an asynchronous task
+ * @ingroup Tokens
+ */
+struct UseFuture
+{
+};
 
-   inline constexpr UseFuture use_future;
-}
+inline constexpr UseFuture use_future;
+} // namespace tokens
 
-}
+} // namespace ngn
