@@ -33,6 +33,11 @@ template <typename T> concept CComplex = IsCComplex<T>::value;
 
 template <typename T> concept StdComplex = IsStdComplex<T>::value;
 
+/**
+ * @brief Complex - Concept defining what is a complex type
+ * @note Maybe change the concept StdComplex to one where we check for the existance of real()/imag() getters
+ * @ingroup Complex
+ */
 template <typename T> concept Complex = StdComplex<T> || CComplex<T>;
 
 template <typename T> concept RealIterator = Real<typename std::iterator_traits<T>::value_type>;
