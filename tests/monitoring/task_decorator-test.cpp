@@ -24,7 +24,7 @@ TEST_CASE("We want to have the start/end time points of a callable","[task_decor
        }
     };
 
-    auto monitored_task = ngn::make_decorated_task(task1, interval);
+    auto monitored_task = ngn::link(task1, interval);
 
     monitored_task();
 
@@ -34,4 +34,36 @@ TEST_CASE("We want to have the start/end time points of a callable","[task_decor
 
     CHECK(result == 333832500);
     ///! [task_time_interval_ex1]
+}
+
+TEST_CASE("We to have the native handle of the thread in which a callable is called","[task_decorator][monitoring][native_handle]")
+{
+
+    ///! [task_native_handle_ex1]
+
+    ngn::ThreadNativeHandle handle;
+
+
+    // check the value is initialized
+    CHECK(!handle.value);
+
+    int result = 0;
+
+    auto task1 = [&](){
+       for(size_t id = 0; id < 1000; ++id)
+       {
+          result += id*id + 2*id;
+       }
+    };
+
+    auto monitored_task = ngn::link(task1, handle);
+
+    monitored_task();
+
+    // check the value is initialized
+    CHECK(handle.value);
+
+    // check the task is run
+    CHECK(result == 333832500);
+    ///! [task_native_handle_ex1]
 }

@@ -1,16 +1,24 @@
 #pragma once
 #include <chrono>
+#include <thread>
 #include "./concepts.hpp"
 
 namespace ngn {
 
-template<TimePoint T>
 /**
  * @brief TimeInterval
  * @ingroup Monitoring
  */
+template<TimePoint T>
 struct TimeInterval;
 
+/**
+ * @brief ThreadNativeHandle
+ * @ingroup Monitoring
+ */
+struct ThreadNativeHandle;
+
+inline std::thread::native_handle_type get_native_handle_value();
 /**
  * @brief make_interval
  * @ingroup Monitoring
@@ -105,5 +113,20 @@ constexpr auto duration(const T& interval)
 {
     return end(interval) - start(interval);
 }
+
+struct ThreadNativeHandle
+{
+    std::thread::native_handle_type value = 0;
+};
+
+inline std::thread::native_handle_type get_native_handle_value()
+{
+#ifdef __linux__
+        return pthread_self();
+#elif _WIN32
+        return GetCurrentThread();
+#endif
+}
+
 
 }
