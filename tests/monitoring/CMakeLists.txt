@@ -4,8 +4,7 @@ list(APPEND CMAKE_MESSAGE_INDENT " ")
 
 add_executable(testu-monitoring
     main.cpp
-    task_decorator-test.cpp
-    task_watcher-test.cpp
+    monitoring-test.cpp
     )
 
 target_link_libraries(testu-monitoring PRIVATE Catch2::Catch2 Monitoring Contexts)

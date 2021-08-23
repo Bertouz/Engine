@@ -5,6 +5,7 @@ list(APPEND CMAKE_MESSAGE_INDENT " ")
 add_executable(testu-contexts
     main.cpp
     strand-test.cpp
+    task_utils-test.cpp
     )
 
 target_link_libraries(testu-contexts PRIVATE Catch2::Catch2 Contexts)

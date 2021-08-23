@@ -1,6 +1,7 @@
 
 add_library(Contexts STATIC
     strand.cpp
+    task_utils.cpp
 )
 
 target_include_directories(Contexts PUBLIC

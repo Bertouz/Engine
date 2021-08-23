@@ -1,5 +1,6 @@
 
-add_library(Monitoring INTERFACE)
+add_library(Monitoring INTERFACE
+    )
 
 target_include_directories(Monitoring INTERFACE
                        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include> # for headers when building
