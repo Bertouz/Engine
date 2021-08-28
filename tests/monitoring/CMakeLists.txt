@@ -5,6 +5,8 @@ list(APPEND CMAKE_MESSAGE_INDENT " ")
 add_executable(testu-monitoring
     main.cpp
     monitoring-test.cpp
+    monitoring_data_parser-test.cpp
+
     )
 
 target_link_libraries(testu-monitoring PRIVATE Catch2::Catch2 Monitoring Contexts)

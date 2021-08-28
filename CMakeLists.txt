@@ -20,7 +20,7 @@ option(ENABLE_MICRO_BENCHMARKS "Build project microbenchmarks" OFF)
 option(USE_SUBMODULE "If set to true then we prefer to use the submodule for the dependencies instead of the findpackage" OFF)
 option(USE_SCIPLOT "If set to true then we will use sciplot in the project" ON)
 set(SHARED_OR_STATIC "STATIC" CACHE STRING "set to shared if you want to build libraries as shared libraries")
-set(TOOLS "pico" CACHE STRING "Semi colon separated list of tools you want to build, possible values are : pico;")
+set(TOOLS "pico" CACHE STRING "Semi colon separated list of tools you want to build, possible values are : pico;watch;dummy_app")
 cmake_dependent_option(ENABLE_MEMCHECK "Add memory check to unit test" ON BUILD_TESTS OFF)
 
 ####################################
