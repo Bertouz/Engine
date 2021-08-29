@@ -3,6 +3,7 @@
 #include <thread>
 #include <type_traits>
 #include <functional>
+#include <fstream>
 
 #include "./concepts.hpp"
 
@@ -17,6 +18,65 @@ using SystemDuration = SystemTimePoint::duration;
 
 using SystemInterval = Interval<SystemTimePoint>;
 
+std::ifstream open_ifstream_procstat(pid_t pid, pid_t tid = 0);
+
+struct ProcStatData
+{
+    int pid; 
+	char name[16];
+    char state;
+	int ppid;
+	int pgrp;
+	int session;
+	int tty_nr;
+	int tpgid;
+	unsigned int flags;
+	long unsigned int minflt;
+	long unsigned int cminflt;
+	long unsigned int majflt;
+	long unsigned int cmajflt;
+	long unsigned int utime;
+	long unsigned int stime;
+	long int cutime;
+	long int cstime;
+	long int priority;
+	long int nice;
+	long int num_threads;
+	long int itrealvalue;
+	long long unsigned int starttime;
+    long unsigned int vsize;
+    long int rss;
+    long unsigned int rsslim;
+    long unsigned int startcode;
+	long unsigned int endcode;
+	long unsigned int startstack;
+	long unsigned int kstkesp;
+    long unsigned int kstkeip;
+	long unsigned int signal;
+	long unsigned int blocked;
+    long unsigned int sigignore;
+	long unsigned int sigcatch;
+	long unsigned int wchan;
+	long unsigned int nswap;
+	long unsigned int cnswap;
+	int exit_signal;
+    int processor;
+	unsigned int rt_priority;
+    unsigned int policy;	
+    long long unsigned int delayacct_blkio_ticks;
+    long unsigned int guest_time;
+	long unsigned int cguest_time;
+	long unsigned int start_data;
+	long unsigned int end_data;
+    long unsigned int start_brk; 
+	long unsigned int arg_start;
+	long unsigned int arg_end;
+	long unsigned int env_start;
+	long unsigned int env_end;
+	int exit_code;
+};
+
+ProcStatData parsing_procstat(std::istream& in);
 
 template<TimePoint T>
 struct Interval

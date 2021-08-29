@@ -20,7 +20,7 @@ option(ENABLE_MICRO_BENCHMARKS "Build project microbenchmarks" OFF)
 option(USE_SUBMODULE "If set to true then we prefer to use the submodule for the dependencies instead of the findpackage" OFF)
 option(USE_SCIPLOT "If set to true then we will use sciplot in the project" ON)
 set(SHARED_OR_STATIC "STATIC" CACHE STRING "set to shared if you want to build libraries as shared libraries")
-set(TOOLS "pico" CACHE STRING "Semi colon separated list of tools you want to build, possible values are : pico;watch;dummy_app")
+set(TOOLS "pico;watch;dummy_app" CACHE STRING "Semi colon separated list of tools you want to build, possible values are : pico;watch;dummy_app")
 cmake_dependent_option(ENABLE_MEMCHECK "Add memory check to unit test" ON BUILD_TESTS OFF)
 
 ####################################
@@ -85,11 +85,11 @@ endif(ENABLE_MICRO_BENCHMARKS)
 # At the moment I only use fftw for dft but in the future I should add other library and give the option to choose one or more
 message(STATUS "Looking for fftw3")
 list(APPEND CMAKE_MESSAGE_INDENT "  ")
-if(WIN32)
-    find_package(FFTW REQUIRED COMPONENTS DOUBLE_LIB )#use "our" cmake file
-else()
-    find_package(FFTW3 REQUIRED)#use fftw cmake file
-endif()
+#if(WIN32)
+		find_package(FFTW REQUIRED COMPONENTS DOUBLE_LIB )#use "our" cmake file
+	#else()
+	#find_package(FFTW3 REQUIRED)#use fftw cmake file
+	#endif()
 list(POP_BACK CMAKE_MESSAGE_INDENT )
 
 if(USE_SCIPLOT)
@@ -118,8 +118,9 @@ if(BUILD_DOC)
 	#find_package(Sphinx REQUIRED)
     find_program(SPHINX_EXECUTABLE NAMES sphinx-build DOC "Path to sphinx-build executable")
 	find_package_handle_standard_args(Sphinx "Failed to find sphinx-build executable" SPHINX_EXECUTABLE)
-    add_compile_definitions(DOC_IMAGE_BUILD_DIR="${CMAKE_BINARY_DIR}/doc/images/")
 endif(BUILD_DOC)
+
+add_compile_definitions(DOC_IMAGE_BUILD_DIR="${CMAKE_BINARY_DIR}/doc/images/")
 
 if(BUILD_TESTS)
     include(CTest)

@@ -16,8 +16,8 @@ int main(int argc, char** argv)
   int interval;
   int work_time;
 
-  app.add_option("-i, --interval", interval, "time interval in millisecondes between two samples")->default_val(100);
-  app.add_option("-w, --work-time", work_time, "time duration of a work in millisecondes")->default_val(100);
+  app.add_option("-i, --interval", interval, "time interval in millisecondes between two samples")->default_val(500);
+  app.add_option("-w, --work-time", work_time, "time duration of a work in millisecondes")->default_val(500);
 
   std::cout<<"Executing in process id : "<< getpid() <<std::endl;
 
@@ -29,7 +29,7 @@ int main(int argc, char** argv)
 
   auto start = std::chrono::steady_clock::now();
 
-  auto max_duration = std::chrono::seconds(60);
+  auto max_duration = std::chrono::seconds(600);
 
   auto current_duration = std::chrono::steady_clock::now() - start;
 

@@ -4,34 +4,42 @@
 #include <unistd.h>
 
 #include <chrono>
+#include <condition_variable>
+#include <iterator>
 #include <thread>
+#include <vector>
+#include <iostream>
+#include <queue>
+#include <thread>
+#include <mutex>
+#include <future>
 
 #include "CLI/CLI.hpp"
 #include "engine/plot.hpp"
+#include "engine/monitoring/monitoring.hpp"
+#include <ncurses.h>
 
 using namespace std::chrono_literals;
-
-std::ifstream open_ifstream_procstat(pid_t pid, pid_t tid = 0);
-
-void sig_handler(int sig);
-
-// Global variables
-// Can remove when using bind for sig_handler
-bool ok = true;
-
-std::vector<double> dt;
-
-std::vector<int> axis;
-
-pid_t pid = 0;
-
-pid_t tid = 0;
 
 int main(int argc, char** argv)
 {
   CLI::App app("A tool to watch and plot the active time of a process at fixed intervals");
 
   int interval;
+
+  bool ok = true;
+  
+  std::vector<double> dt;
+  
+  std::vector<int> axis;
+
+  dt.reserve(100'000);
+
+  axis.reserve(100'000);
+  
+  pid_t pid = 0;
+  
+  pid_t tid = 0;
 
   app.add_option("-i, --interval", interval, "time interval in millisecondes between two samples")->default_val(100);
 
@@ -51,98 +59,65 @@ int main(int argc, char** argv)
 
   std::cout << "Watching task : " << tid << std::endl;
 
-  std::ifstream istat = open_ifstream_procstat(pid, tid);
+  std::ifstream istat = ngn::open_ifstream_procstat(pid, tid);
 
-  std::array<std::string, 52> data;
+  std::queue<ngn::ProcStatData> stats;
+  std::mutex stats_mutex;
+  std::condition_variable stats_cv;
 
-  dt.reserve(100'000);
+  initscr();
+  cbreak();
+  curs_set(0);
+  int ymax, xmax;
+  getmaxyx(stdscr, ymax, xmax);
+  WINDOW* info_win = newwin(4, xmax-2, 1, 1);
+  mvwprintw(info_win, 1, 1, "pid %s", "myname");
+  box(info_win, 0, 0);
+  int c = wgetch(info_win);
+  endwin();
 
-  axis.reserve(100'000);
-
-  signal(SIGINT, sig_handler);
-
-  const long int fs = sysconf(_SC_CLK_TCK);
-
-  std::copy(std::istream_iterator<std::string>(istat), std::istream_iterator<std::string>(), data.begin());
-
-  double utime = std::stod(data[13]);
-  double stime = std::stod(data[14]);
-  double wutime = std::stod(data[15]);
-  double wstime = std::stod(data[16]);
-  istat.clear();
-  istat.seekg(0);
-  double prev_time = 1000 * double(utime + stime + wutime + wstime) / fs;
-
-  int curr_time = 0;
-
-  while (ok)
+  auto run_parsing = [&istat, &stats,&stats_mutex, &stats_cv, &ok, &pause_duration]()
   {
-    std::copy(std::istream_iterator<std::string>(istat), std::istream_iterator<std::string>(), data.begin());
+    while (ok)
+    {
+      auto start = std::chrono::steady_clock::now();
 
-    double utime = std::stod(data[13]);
-    double stime = std::stod(data[14]);
-    double wutime = std::stod(data[15]);
-    double wstime = std::stod(data[16]);
-    double total_time = 1000 * double(utime + stime + wutime + wstime) / fs;
+	  auto lock = std::unique_lock(stats_mutex);
 
-    axis.push_back(curr_time);
-    dt.push_back(total_time - prev_time);
+      stats.push(ngn::parsing_procstat(istat));
 
-    istat.clear();
-    istat.seekg(0);
-    prev_time = total_time;
-    curr_time += pause_duration.count();
-    std::this_thread::sleep_for(pause_duration);
-  }
+	  stats_cv.notify_one();
+
+      istat.clear();
+
+      istat.seekg(0);
+
+	  auto end = std::chrono::steady_clock::now();
+
+	  auto d = pause_duration - std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+
+	  std::cout<<"pause : "<<d.count()<<std::endl;
+
+      std::this_thread::sleep_for(d);
+
+    }
+  };
+
+  std::thread producer_thread(run_parsing);
+
+  producer_thread.join();
 
   return 0;
 }
 
-void sig_handler(int sig)
-{
-  switch (sig)
-  {
-    case SIGINT:
-    {
-      std::cout << "Watcher interuption called, plotting historic and exiting..." << std::endl;
+      //const long int fs = sysconf(_SC_CLK_TCK);
+	  
+      //double total_time = 1000 * double(stat.utime + stat.stime + stat.cutime + stat.cstime) / fs;
 
-      plt::Plot plot_dt;
+      //axis.push_back(curr_time);
 
-      plot_dt.palette("set2");
+      //dt.push_back(total_time - prev_time);
+	  
+      //prev_time = total_time;
 
-      std::string label = "process :" + std::to_string(pid) + ", task id : " + std::to_string(tid);
-
-      plot_dt.drawCurve(axis, dt).label(label).lineWidth(4);
-
-      plt::Figure figure({{plot_dt}});
-
-      figure.size(749, 749);
-
-      figure.show();
-
-      std::cout << "Plotting done, exiting..." << std::endl;
-
-      exit(0);
-    }
-    default:
-    {
-      fprintf(stderr, "wasn't expecting that!\n");
-      abort();
-    }
-  }
-}
-
-std::ifstream open_ifstream_procstat(pid_t pid, pid_t tid)
-{
-
-  std::filesystem::path statfile = std::filesystem::path("/proc") / std::to_string(pid) /
-                                   std::filesystem::path("task") / std::to_string(tid) / std::filesystem::path("stat");
-
-  std::cout << statfile << std::endl;
-
-  if (std::filesystem::exists(statfile))
-  {
-    return std::ifstream(statfile.string());
-  }
-  throw std::runtime_error("THe file :" + statfile.string() + " doesnt exists");
-}
+      //curr_time += pause_duration.count();
