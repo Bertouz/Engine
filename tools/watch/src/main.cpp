@@ -112,7 +112,6 @@ int main(int argc, char** argv)
   int previous_utime = first.utime;
   while(ok)
   {
-
       while(!stats.empty())
       {
         ngn::ProcStatData stat = stats.front();
@@ -125,56 +124,61 @@ int main(int argc, char** argv)
 
 		// writing pid
 		int info_win_x_offset = 1;
-		std::string pid_label = "pid : " + std::to_string(stat.pid);
+		std::string pid_label = "pid: " + std::to_string(stat.pid);
 		mvwaddstr(info_win, 1, info_win_x_offset, pid_label.c_str());
 		// writing exe name
 		info_win_x_offset += pid_label.size() + 1;
-		std::string name_label = "name : " + std::string(stat.name);
+		std::string name_label = "name: " + std::string(stat.name);
 		mvwaddstr(info_win, 1, info_win_x_offset, name_label.c_str());
 
 		// writing state 
 		info_win_x_offset += name_label.size() + 1;
-		std::string state_label = "name : " + std::string(1, stat.state);
+		std::string state_label = "state: " + std::string(1, stat.state);
 		mvwaddstr(info_win, 1, info_win_x_offset, state_label.c_str());
 		// writing num threads
 		info_win_x_offset += state_label.size() + 1;
-		std::string num_threads_label = "nb threads : " + std::to_string(stat.num_threads);
+		std::string num_threads_label = "number of threads: " + std::to_string(stat.num_threads);
 		mvwaddstr(info_win, 1, info_win_x_offset, num_threads_label.c_str());
 
 		// writing cpu
 		info_win_x_offset += num_threads_label.size() + 1;
-		std::string cpu_label = "cpu : " + std::to_string(stat.processor);
+		std::string cpu_label = "cpu: " + std::to_string(stat.processor);
 		mvwaddstr(info_win, 1, info_win_x_offset, cpu_label.c_str());
 
 		// writing utime 
 		info_win_x_offset += cpu_label.size() + 1;
-		std::string time_label = "time : " + std::to_string(stat.utime + stat.stime);
+		std::string time_label = "time: " + std::to_string(stat.utime + stat.stime);
 		mvwaddstr(info_win, 1, info_win_x_offset, time_label.c_str());
 
 		// writing utime 
 		info_win_x_offset += time_label.size() + 1;
-		std::string debug_label = "active percent during interval : " + std::to_string(100 * 10 * (stat.utime - previous_utime)/(float)interval);
+		std::string debug_label = "active percent: " + std::to_string(100 * 10 * (stat.utime - previous_utime)/(float)interval);
 		mvwaddstr(info_win, 1, info_win_x_offset, debug_label.c_str());
 
 		int nb_ybin = plot_win_height - 3;
 
+		// Clear previous plot
 		for(int id = 0; id < plot_data.size(); ++id)
 		{
            mvwaddch(plot_win, 1 + nb_ybin - plot_data[id], id + 1, ' ');
 		}
 
+		// move data to the left so that we only modify the last value
 		std::rotate(plot_data.begin(), plot_data.begin()+1, plot_data.end());
 
-
+		// update last value
 		plot_data[plot_data.size()-1] = 10*(stat.utime - previous_utime)*nb_ybin/interval;
 
+		// set the previous to current so that we can compute the variation
 		previous_utime = stat.utime;
 
+		// plot the data
 		for(int id = 0; id < plot_data.size(); ++id)
 		{
            mvwaddch(plot_win, nb_ybin + 1 - plot_data[id], id + 1, '+');
 		}
 
+        // refresh the windows so that it show the data
         wrefresh(info_win);
         wrefresh(plot_win);
 	  }
@@ -187,14 +191,3 @@ int main(int argc, char** argv)
 
   return 0;
 }
-
-	  
-      //double total_time = 1000 * double(stat.utime + stat.stime + stat.cutime + stat.cstime) / fs;
-
-      //axis.push_back(curr_time);
-
-      //dt.push_back(total_time - prev_time);
-	  
-      //prev_time = total_time;
-
-      //curr_time += pause_duration.count();
