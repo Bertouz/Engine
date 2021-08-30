@@ -93,6 +93,7 @@ int main(int argc, char** argv)
   };
 
   std::thread producer_thread(run_parsing);
+  std::this_thread::sleep_for(pause_duration);
 
   initscr();
   cbreak();
@@ -100,21 +101,82 @@ int main(int argc, char** argv)
   int ymax, xmax;
   getmaxyx(stdscr, ymax, xmax);
   WINDOW* info_win = newwin(4, xmax-2, 1, 1);
-  mvwprintw(info_win, 1, 1, "pid %s", "myname");
-  wmove(info_win, 1, 10);
+  int plot_win_width = xmax-2;
+  int plot_win_height = ymax - 6;
+  WINDOW* plot_win = newwin(plot_win_height, plot_win_width, 1+4, 1);
   box(info_win, 0, 0);
-  wrefresh(info_win);
+  box(plot_win, 0, 0);
+  std::vector<int> plot_data(plot_win_width - 2, 0);
+  const long int fs = sysconf(_SC_CLK_TCK);
+  ngn::ProcStatData first = stats.front();
+  int previous_utime = first.utime;
   while(ok)
   {
+
       while(!stats.empty())
       {
         ngn::ProcStatData stat = stats.front();
+
         std::unique_lock<std::mutex> lock(stats_mutex);
         stats.pop();
         lock.unlock();
+
 		mvwaddch(info_win, 1, xmax/4+8,stat.state);
-        mvwprintw(info_win, 1, xmax/2, "user time : %d", stat.utime);
+
+		// writing pid
+		int info_win_x_offset = 1;
+		std::string pid_label = "pid : " + std::to_string(stat.pid);
+		mvwaddstr(info_win, 1, info_win_x_offset, pid_label.c_str());
+		// writing exe name
+		info_win_x_offset += pid_label.size() + 1;
+		std::string name_label = "name : " + std::string(stat.name);
+		mvwaddstr(info_win, 1, info_win_x_offset, name_label.c_str());
+
+		// writing state 
+		info_win_x_offset += name_label.size() + 1;
+		std::string state_label = "name : " + std::string(1, stat.state);
+		mvwaddstr(info_win, 1, info_win_x_offset, state_label.c_str());
+		// writing num threads
+		info_win_x_offset += state_label.size() + 1;
+		std::string num_threads_label = "nb threads : " + std::to_string(stat.num_threads);
+		mvwaddstr(info_win, 1, info_win_x_offset, num_threads_label.c_str());
+
+		// writing cpu
+		info_win_x_offset += num_threads_label.size() + 1;
+		std::string cpu_label = "cpu : " + std::to_string(stat.processor);
+		mvwaddstr(info_win, 1, info_win_x_offset, cpu_label.c_str());
+
+		// writing utime 
+		info_win_x_offset += cpu_label.size() + 1;
+		std::string time_label = "time : " + std::to_string(stat.utime + stat.stime);
+		mvwaddstr(info_win, 1, info_win_x_offset, time_label.c_str());
+
+		// writing utime 
+		info_win_x_offset += time_label.size() + 1;
+		std::string debug_label = "active percent during interval : " + std::to_string(100 * 10 * (stat.utime - previous_utime)/(float)interval);
+		mvwaddstr(info_win, 1, info_win_x_offset, debug_label.c_str());
+
+		int nb_ybin = plot_win_height - 3;
+
+		for(int id = 0; id < plot_data.size(); ++id)
+		{
+           mvwaddch(plot_win, 1 + nb_ybin - plot_data[id], id + 1, ' ');
+		}
+
+		std::rotate(plot_data.begin(), plot_data.begin()+1, plot_data.end());
+
+
+		plot_data[plot_data.size()-1] = 10*(stat.utime - previous_utime)*nb_ybin/interval;
+
+		previous_utime = stat.utime;
+
+		for(int id = 0; id < plot_data.size(); ++id)
+		{
+           mvwaddch(plot_win, nb_ybin + 1 - plot_data[id], id + 1, '+');
+		}
+
         wrefresh(info_win);
+        wrefresh(plot_win);
 	  }
 	  auto tmp = std::unique_lock(stats_mutex);
 	  stats_cv.wait(tmp, [&stats](){return !stats.empty();});
@@ -126,7 +188,6 @@ int main(int argc, char** argv)
   return 0;
 }
 
-      //const long int fs = sysconf(_SC_CLK_TCK);
 	  
       //double total_time = 1000 * double(stat.utime + stat.stime + stat.cutime + stat.cstime) / fs;
 
