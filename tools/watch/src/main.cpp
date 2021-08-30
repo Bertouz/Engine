@@ -65,17 +65,6 @@ int main(int argc, char** argv)
   std::mutex stats_mutex;
   std::condition_variable stats_cv;
 
-  initscr();
-  cbreak();
-  curs_set(0);
-  int ymax, xmax;
-  getmaxyx(stdscr, ymax, xmax);
-  WINDOW* info_win = newwin(4, xmax-2, 1, 1);
-  mvwprintw(info_win, 1, 1, "pid %s", "myname");
-  box(info_win, 0, 0);
-  int c = wgetch(info_win);
-  endwin();
-
   auto run_parsing = [&istat, &stats,&stats_mutex, &stats_cv, &ok, &pause_duration]()
   {
     while (ok)
@@ -88,6 +77,8 @@ int main(int argc, char** argv)
 
 	  stats_cv.notify_one();
 
+	  lock.unlock();
+
       istat.clear();
 
       istat.seekg(0);
@@ -96,14 +87,39 @@ int main(int argc, char** argv)
 
 	  auto d = pause_duration - std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
-	  std::cout<<"pause : "<<d.count()<<std::endl;
-
       std::this_thread::sleep_for(d);
 
     }
   };
 
   std::thread producer_thread(run_parsing);
+
+  initscr();
+  cbreak();
+  curs_set(0);
+  int ymax, xmax;
+  getmaxyx(stdscr, ymax, xmax);
+  WINDOW* info_win = newwin(4, xmax-2, 1, 1);
+  mvwprintw(info_win, 1, 1, "pid %s", "myname");
+  wmove(info_win, 1, 10);
+  box(info_win, 0, 0);
+  wrefresh(info_win);
+  while(ok)
+  {
+      while(!stats.empty())
+      {
+        ngn::ProcStatData stat = stats.front();
+        std::unique_lock<std::mutex> lock(stats_mutex);
+        stats.pop();
+        lock.unlock();
+		mvwaddch(info_win, 1, xmax/4+8,stat.state);
+        mvwprintw(info_win, 1, xmax/2, "user time : %d", stat.utime);
+        wrefresh(info_win);
+	  }
+	  auto tmp = std::unique_lock(stats_mutex);
+	  stats_cv.wait(tmp, [&stats](){return !stats.empty();});
+  }
+  endwin();
 
   producer_thread.join();
 
