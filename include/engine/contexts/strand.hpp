@@ -1,58 +1,76 @@
 #pragma once
-#include "contexts_api.hpp"
-#include <iostream>
 #include <queue>
+
+#include <iostream>
+#include <map>
 #include <thread>
+
+#include "basic_types.hpp"
+#include "concepts.hpp"
+#include "task_utils.hpp"
 
 namespace ngn
 {
 
+template<QueueCallable TaskQueue = std::queue<Task>>
 struct Strand;
 
-template <typename FuncType> void post(Strand &context, FuncType f);
+template<QueueCallable Q>
+inline void post(Strand<Q>& context, Task f);
 
-template <typename FuncType> std::future<void> post(Strand &context, FuncType f, tokens::UseFuture);
+template<QueueCallable Q>
+inline void post(Strand<Q>& context, Task f, Task handler);
 
-void wait(Strand &context);
+template<QueueCallable Q>
+inline void wait(Strand<Q>& context);
 
-void start(Strand &context);
+void start(Strand<>& context);
 
+void schedule(std::queue<std::pair<TaskId, Task>>& queue, Task task, TaskId id);
+
+template<QueueCallable TaskQueue>
 struct Strand
 {
-    ~Strand();
+  ~Strand();
 
-    template <typename FuncType> friend void post(Strand &context, FuncType f);
+  TaskQueue _queue;
+  std::mutex _task_queue_mutex;
+  std::condition_variable _task_queue_cv;
 
-    template <typename FuncType> friend std::future<void> post(Strand &context, FuncType f, tokens::UseFuture);
+  std::queue<TaskId> _finished_tasks;
+  std::mutex _completion_queue_mutex;
 
-    friend void wait(Strand &context);
+  std::map<TaskId, Task> _tasks_completion_handlers;
 
-    friend void start(Strand &context);
+  std::thread _thread;
 
-  private:
-    std::queue<std::packaged_task<void()>> _task_queue;
-    std::thread _thread;
-    std::mutex _mutex;
-    std::condition_variable _cv;
-
-    // maybe use an enum for status
-    bool _is_running : 1 = false;
-    bool _stop : 1 = false;
+  // maybe use an enum for signals
+  bool _is_running : 1 = false;
+  bool _stop : 1 = false;
+  size_t _curr_task_id = 0;
 };
 
-template <typename FuncType> void post(Strand &context, FuncType f)
+} // namespace ngn
+
+namespace ngn
 {
-    context._task_queue.push(std::packaged_task<void()>(std::move(f)));
-    start(context);
+template<QueueCallable Q>
+inline void wait(Strand<Q>& context)
+{
+  wait(context._queue);
 }
 
-template <typename FuncType> std::future<void> post(Strand &context, FuncType f, tokens::UseFuture)
+template<QueueCallable Q>
+inline void post(Strand<Q>& context, Task f)
 {
-    auto task = std::packaged_task<void()>(std::move(f));
-    auto future = task.get_future();
-    context._task_queue.push(std::move(task));
-    start(context);
-    return future;
+  schedule(context._queue, f);
+  start(context);
+}
+
+template<QueueCallable Q>
+inline void post(Strand<Q>& context, Task f, Task handler)
+{
+  throw std::runtime_error("todo");
 }
 
 } // namespace ngn

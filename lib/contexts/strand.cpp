@@ -1,70 +1,69 @@
 #include "engine/contexts/strand.hpp"
 
+#include "engine/contexts/queue_utils.hpp"
+
 namespace ngn
 {
 
-void wait(Strand &context)
+void schedule(std::queue<std::pair<TaskId, Task>>& queue, Task task, TaskId id)
 {
-    using namespace std::chrono_literals;
-    while (!context._task_queue.empty())
-    {
-        std::this_thread::sleep_for(1ms);
-    }
+  queue.push(std::make_pair(std::move(id), std::move(task)));
 }
 
-void start(Strand &context)
+void start(Strand<>& context)
 {
-    if (!context._is_running)
-    {
-        context._thread = std::thread([&context]() {
-            while (!context._stop)
-            {
-                // Run all task present in the queue
-                while (!context._task_queue.empty())
-                {
-                    // request the access to the queue in writing mode
-                    auto lock = std::unique_lock(context._mutex);
+  if (!context._is_running)
+  {
+    context._thread = std::thread([&context]() {
+      while (!context._stop)
+      {
+        // Run all task present in the queue
+        while (!empty(context._queue))
+        {
+          // request the access to the queue in writing mode
+          auto lock = std::unique_lock(context._task_queue_mutex);
 
-                    // take the front task to be run
-                    auto task = std::move(context._task_queue.front());
+          // take the front task to be run
+          auto [_, task] = require_task(context._queue);
+          // remove task from queue
 
-                    // remove task from queue
-                    context._task_queue.pop();
+          // free the queue access write
+          lock.unlock();
 
-                    // free the queue access write
-                    lock.unlock();
+          // run task
+          task();
 
-                    // run task
-                    task();
-                }
+          //_completed_tokens
+        }
 
-                // take a lock and wait for a new task to be added to the queue
-                auto lock = std::unique_lock(context._mutex);
+        // take a lock and wait for a new task to be added to the queue
+        auto lock = std::unique_lock(context._task_queue_mutex);
 
-                context._cv.wait(lock, [&context]() { return !context._task_queue.empty() || context._stop; });
-            }
+        context._task_queue_cv.wait(lock, [&context]() { return !empty(context._queue) || context._stop; });
+      }
 
-            // reinit
-            context._is_running = false;
-            context._stop = false;
-        });
+      // reinit
+      context._is_running = false;
+      context._stop = false;
+    });
 
-        // Initialize the status of the context
-        context._is_running = true;
-        context._stop = false;
-    }
+    // Initialize the status of the context
+    context._is_running = true;
+    context._stop = false;
+  }
 }
 
-Strand::~Strand()
+template<>
+Strand<>::~Strand()
 {
-    using namespace std::chrono_literals;
-    while (!_task_queue.empty())
-    {
-        std::this_thread::sleep_for(1ms);
-    }
-    _stop = true;
-    _cv.notify_one();
-    _thread.join();
+  using namespace std::chrono_literals;
+  while (!empty(_queue))
+  {
+    std::this_thread::sleep_for(1ms);
+  }
+  _stop = true;
+  _task_queue_cv.notify_one();
+  _thread.join();
 }
 
 } // namespace ngn
